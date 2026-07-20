@@ -1,0 +1,96 @@
+════════════════════════════════════════════════════════════════════════
+MOKAYAKOUBI - FILES TO UPLOAD TO GITHUB
+════════════════════════════════════════════════════════════════════════
+
+STEP 1: Download the entire mokayakoubi-starter/ folder from claude.ai outputs
+STEP 2: Go to GitHub.com → Your repo → Upload files
+STEP 3: Drag and drop ALL files from the folder
+
+════════════════════════════════════════════════════════════════════════
+CHECKLIST: These files MUST be in the folder
+════════════════════════════════════════════════════════════════════════
+
+ROOT LEVEL (Upload these files directly):
+  ☐ .env.example
+  ☐ .gitignore
+  ☐ README.md
+  ☐ QUICK_START.md
+  ☐ SETUP_INSTRUCTIONS.md
+  ☐ database.sql
+  ☐ next.config.js
+  ☐ package.json
+  ☐ postcss.config.js
+  ☐ tailwind.config.ts
+  ☐ tsconfig.json
+
+APP FOLDER (app/ with these inside):
+  ☐ app/page.tsx
+  ☐ app/layout.tsx
+  ☐ app/globals.css
+  ☐ app/api/emails/subscribe/route.ts
+
+LIB FOLDER (lib/ with this inside):
+  ☐ lib/supabase.ts
+
+════════════════════════════════════════════════════════════════════════
+HOW TO UPLOAD
+════════════════════════════════════════════════════════════════════════
+
+1. Go to: https://github.com/mokayakoubi/mokayakoubi (your new repo)
+
+2. Click: "Upload files" button (middle of empty repo page)
+
+3. Drag this entire folder into the upload area
+
+4. Commit message: "Initial Next.js setup"
+
+5. Click "Commit changes"
+
+6. DONE! All files are on GitHub ✓
+
+════════════════════════════════════════════════════════════════════════
+IF UPLOAD FAILS
+════════════════════════════════════════════════════════════════════════
+
+Try uploading in groups:
+  1. Upload all root files first (the .json, .js, .md files)
+  2. Upload app/ folder contents
+  3. Upload lib/ folder contents
+
+GitHub will auto-create the folder structure.
+
+════════════════════════════════════════════════════════════════════════
+VERIFICATION
+════════════════════════════════════════════════════════════════════════
+
+After upload, your GitHub repo should show:
+
+├── .env.example
+├── .gitignore
+├── README.md
+├── database.sql
+├── package.json
+├── next.config.js
+├── tailwind.config.ts
+├── tsconfig.json
+├── postcss.config.js
+├── QUICK_START.md
+├── SETUP_INSTRUCTIONS.md
+├── app/
+│   ├── page.tsx
+│   ├── layout.tsx
+│   ├── globals.css
+│   └── api/emails/subscribe/route.ts
+└── lib/
+    └── supabase.ts
+
+If this structure exists → You're good to go! ✓
+
+════════════════════════════════════════════════════════════════════════
+NEXT STEP
+════════════════════════════════════════════════════════════════════════
+
+After upload, open: SETUP_INSTRUCTIONS.md (in your repo)
+Follow the 5 steps for Supabase → Stripe → Vercel
+
+Let's go! 🚀
