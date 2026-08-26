@@ -22,12 +22,14 @@ officielles ou vos propres données.
 
 ## ⚖️ À lire avant utilisation (conformité)
 
-- **Emails B2B (CNIL)** — la prospection par email à des professionnels
-  (entreprises, associations) est autorisée en France sans consentement
-  préalable **si** : (1) le message concerne l'activité professionnelle du
-  destinataire, (2) l'expéditeur est clairement identifié, (3) le
-  destinataire peut se désinscrire facilement. Le modèle fourni respecte ces
-  points — pensez à traiter toute réponse "STOP" avec `node cli.js optout`.
+- **Emails B2B** — visez des adresses professionnelles génériques
+  (contact@, info@...) plutôt que des emails personnels, identifiez
+  clairement l'expéditeur (Caractère) et l'objet commercial du message, et
+  permettez toujours une désinscription facile. En Algérie, la loi n°18-07
+  du 10 juin 2018 encadre la protection des données à caractère personnel ;
+  en France, ce sont les règles CNIL sur la prospection B2B. Le modèle
+  fourni respecte ces principes de base (identification + opt-out) — pensez
+  à traiter toute réponse "STOP" avec `node cli.js optout`.
 - **WhatsApp** — l'envoi automatisé en masse via des outils non-officiels
   viole les CGU de WhatsApp et peut faire bannir votre numéro. Cet outil ne
   fait **que générer des liens pré-remplis** : c'est vous qui cliquez et
@@ -57,6 +59,10 @@ cp .env.example .env
 - **SendGrid** : créez un compte sur [sendgrid.com](https://sendgrid.com),
   générez une clé API (Settings → API Keys), et vérifiez votre domaine ou
   adresse d'envoi (Sender Authentication) pour éviter le spam.
+- **DEFAULT_COUNTRY_CODE** : réglé sur `213` (Algérie) par défaut, pour que
+  les numéros locaux ("0555 12 34 56") soient bien convertis en
+  international ("+213555123456") pour les liens WhatsApp. Changez-le si
+  vous prospectez un autre pays.
 
 Node.js 18 ou plus est requis (utilise `fetch` natif).
 
@@ -67,17 +73,29 @@ Node.js 18 ou plus est requis (utilise `fetch` natif).
 ### 1. Trouver des leads
 
 ```bash
-node cli.js search:places --query "club de sport à Lyon"
-node cli.js search:places --query "comité d'entreprise à Villeurbanne"
-node cli.js search:places --query "agence événementielle à Lyon"
-node cli.js search:places --query "boutique de sport à Lyon"
+node cli.js search:places --query "club de sport à Alger" --city Alger
+node cli.js search:places --query "salle des fêtes à Oran" --city Oran
+node cli.js search:places --query "agence événementielle à Constantine" --city Constantine
+node cli.js search:places --query "école privée à Alger" --city Alger
+node cli.js search:places --query "hôtel à Annaba" --city Annaba
 ```
 
-Idées de secteurs pertinents pour Caractère : clubs sportifs, associations
-loi 1901, comités d'entreprise (CE/CSE), écoles/collèges/lycées, agences
-événementielles, mairies et collectivités, entreprises du BTP (vêtements de
-travail), hôtels/restaurants (tenues de service), salles de sport,
-start-ups/PME (goodies d'entreprise).
+`--city` force la ville enregistrée sur les leads trouvés (utile pour
+`{{city}}` dans les messages, et pour filtrer/relancer par ville plus tard).
+Répétez la recherche pour chaque grande ville visée (Alger, Oran,
+Constantine, Annaba, Sétif, Blida, Tlemcen, Béjaïa...).
+
+Idées de secteurs pertinents pour Caractère en Algérie : clubs sportifs et
+salles de sport, associations, écoles et instituts privés, agences
+événementielles et salles des fêtes (mariages, cérémonies — gros
+consommateurs de tote bags et gilets personnalisés), hôtels et restaurants
+(tenues de service), entreprises et PME (tenues d'équipe, goodies),
+municipalités/APC, cliniques et pharmacies (blouses personnalisées).
+
+Le champ `websiteUri` de Google Places est moins souvent renseigné pour les
+petites structures en Algérie qu'en Europe — comptez surtout sur le
+téléphone (WhatsApp) comme canal principal, l'email en complément quand il
+existe.
 
 Ou importez vos propres listes :
 
@@ -152,8 +170,12 @@ en éditant `data/leads.json` ou via de futures commandes.
 
 - Ajouter un statut `responded` / `won` / `lost` mis à jour manuellement
   pour suivre le pipeline commercial.
-- Brancher l'API [recherche-entreprises.api.gouv.fr](https://recherche-entreprises.api.gouv.fr/)
-  (gratuite, sans clé) pour repérer des associations/entreprises par code
-  NAF avant de les chercher sur Google Places.
+- Compléter avec des imports CSV manuels depuis des annuaires professionnels
+  algériens (CCI locales, ANDI, wilayas...) — il n'existe pas d'équivalent
+  algérien gratuit à l'API SIRENE française pour l'instant.
+- Si vous prospectez aussi en France, l'API
+  [recherche-entreprises.api.gouv.fr](https://recherche-entreprises.api.gouv.fr/)
+  (gratuite, sans clé) permet de repérer des associations/entreprises par
+  code NAF avant de les chercher sur Google Places.
 - Passer à l'API officielle WhatsApp Business (Meta) si le volume justifie
   un envoi semi-automatique avec templates pré-approuvés et opt-in.

@@ -114,7 +114,7 @@ function upsertLeads(rawLeads) {
 }
 
 function normalizeLead(raw) {
-  const { toE164FR } = require("./phone");
+  const { toE164 } = require("./phone");
   const phone = (raw.phone || raw.telephone || raw.nationalPhoneNumber || "").trim();
   return {
     id: raw.id,
@@ -123,7 +123,7 @@ function normalizeLead(raw) {
     city: (raw.city || raw.ville || "").trim(),
     address: (raw.address || raw.adresse || "").trim(),
     phone: phone,
-    phoneE164: raw.phoneE164 || toE164FR(phone),
+    phoneE164: raw.phoneE164 || toE164(phone),
     email: (raw.email || "").trim().toLowerCase(),
     website: (raw.website || raw.site || raw.site_web || "").trim(),
     source: raw.source || "import",

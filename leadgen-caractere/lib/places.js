@@ -20,7 +20,7 @@ const FIELD_MASK = [
   "places.primaryType",
 ].join(",");
 
-async function searchText({ apiKey, textQuery, maxPages = 3 }) {
+async function searchText({ apiKey, textQuery, maxPages = 3, city, category }) {
   if (!apiKey) {
     throw new Error(
       "GOOGLE_PLACES_API_KEY manquant. Ajoutez-le dans votre fichier .env (voir .env.example)."
@@ -52,12 +52,20 @@ async function searchText({ apiKey, textQuery, maxPages = 3 }) {
 
     const data = await res.json();
     for (const place of data.places || []) {
+      // On privilégie internationalPhoneNumber (déjà préfixé par l'indicatif
+      // pays correct, ex "+213...") pour un E.164 fiable quel que soit le
+      // pays recherché ; nationalPhoneNumber reste utilisé pour l'affichage.
+      const intl = place.internationalPhoneNumber
+        ? "+" + place.internationalPhoneNumber.replace(/[^\d]/g, "")
+        : "";
       results.push({
         name: place.displayName && place.displayName.text,
         address: place.formattedAddress,
         phone: place.nationalPhoneNumber || place.internationalPhoneNumber || "",
+        phoneE164: intl || undefined,
         website: place.websiteUri || "",
-        category: place.primaryType || "",
+        category: category || place.primaryType || "",
+        city: city || "",
         businessStatus: place.businessStatus,
         source: "google_places",
       });

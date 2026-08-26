@@ -13,7 +13,7 @@ const { findEmailOnWebsite } = require("./lib/enrich");
 const { renderEmail, renderWhatsapp } = require("./lib/templates");
 const { sendEmail } = require("./lib/email");
 const { buildWaLink, buildHtmlPage } = require("./lib/whatsapp");
-const { toE164FR } = require("./lib/phone");
+const { toE164 } = require("./lib/phone");
 
 const OUT_DIR = path.join(__dirname, "out");
 
@@ -47,9 +47,12 @@ leadgen-caractere — prospection textile personnalisé (Caractère)
 
 Commandes disponibles :
 
-  search:places --query "<texte libre>" [--max-pages 3]
-      Cherche des entreprises via l'API officielle Google Places.
-      Exemple : node cli.js search:places --query "club de sport à Lyon"
+  search:places --query "<texte libre>" [--city "Alger"] [--category "..."] [--max-pages 3]
+      Cherche des entreprises via l'API officielle Google Places (fonctionne
+      pour n'importe quel pays/ville, il suffit de l'indiquer dans --query).
+      --city force la ville enregistrée sur chaque lead trouvé (utile pour
+      {{city}} dans les messages et pour filtrer plus tard).
+      Exemple : node cli.js search:places --query "club de sport à Alger" --city Alger
 
   import:csv <fichier.csv>
       Importe des leads depuis un fichier CSV (colonnes: name, category,
@@ -99,8 +102,10 @@ async function cmdSearchPlaces(args) {
     apiKey: process.env.GOOGLE_PLACES_API_KEY,
     textQuery: query,
     maxPages: Number(args["max-pages"] || 3),
+    city: args.city,
+    category: args.category,
   });
-  const leads = results.map((r) => ({ ...r, phoneE164: toE164FR(r.phone) }));
+  const leads = results.map((r) => ({ ...r, phoneE164: r.phoneE164 || toE164(r.phone) }));
   const { added, updated } = store.upsertLeads(leads);
   console.log(`Trouvé ${results.length} résultat(s). Nouveaux leads: ${added}, complétés: ${updated}.`);
 }
@@ -242,7 +247,7 @@ function cmdWhatsappGenerate(args) {
 
   const rows = leads.map((lead) => {
     const message = renderWhatsapp(lead, process.env);
-    const phoneE164 = lead.phoneE164 || toE164FR(lead.phone);
+    const phoneE164 = lead.phoneE164 || toE164(lead.phone);
     const link = buildWaLink(phoneE164, message);
     return { name: lead.name, city: lead.city, phone: lead.phone, message, link, id: lead.id };
   });
