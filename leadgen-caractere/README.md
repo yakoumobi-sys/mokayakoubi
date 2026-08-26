@@ -5,7 +5,8 @@ polos, gilets, tote bags). Il permet de :
 
 1. **Trouver des leads** — entreprises, clubs, associations, écoles,
    agences événementielles... susceptibles de commander des textiles
-   personnalisés — via l'API officielle Google Places, ou en important vos
+   personnalisés — via l'API officielle Google Places, via extraction IA
+   (ScrapeGraphAI) de pages d'annuaires/fédérations, ou en important vos
    propres listes en CSV.
 2. **Compléter les emails manquants** en cherchant sur le site public de
    chaque lead (best effort).
@@ -14,9 +15,11 @@ polos, gilets, tote bags). Il permet de :
    envoyez vous-même d'un clic.
 
 Le tout est un outil en ligne de commande autonome, séparé du site
-mokayakoubi.vercel.app — pas de scraping de Google Maps ou LinkedIn, qui
-violerait leurs CGU et exposerait à des blocages : tout repose sur des API
-officielles ou vos propres données.
+mokayakoubi.vercel.app. Pour les plateformes qui interdisent le scraping
+dans leurs CGU (Google Maps, LinkedIn...), on passe par leurs API
+officielles plutôt que de scraper directement ; pour les autres sources
+(annuaires, fédérations...), le composant ScrapeGraphAI vérifie robots.txt
+avant d'extraire quoi que ce soit — voir `scrape/README.md`.
 
 ---
 
@@ -121,6 +124,26 @@ node cli.js import:csv sample/leads-exemple.csv
 
 Colonnes acceptées : `name, category, city, address, phone, email, website`
 (alias français aussi reconnus : `nom, secteur, ville, adresse, telephone`).
+
+**Extraction IA (ScrapeGraphAI)** — pour les leads qui ne sont pas sur
+Google Maps (page d'une fédération sportive listant ses clubs affiliés,
+annuaire d'une chambre de commerce, page "nos adhérents" d'une
+association...), le dossier `scrape/` contient un script Python séparé qui
+utilise [ScrapeGraphAI](https://github.com/ScrapeGraphAI/Scrapegraph-ai)
+pour extraire les leads d'une page avec une simple instruction en langage
+naturel, puis les réimporte ici :
+
+```bash
+cd scrape
+pip install -r requirements.txt
+cp .env.example .env   # renseignez OPENAI_API_KEY (ou un modèle local Ollama)
+python scrape_leads.py --url "https://exemple.dz/annuaire/clubs-alger" --output out/leads.csv
+cd ..
+node cli.js import:csv scrape/out/leads.csv
+```
+
+Voir `scrape/README.md` pour le détail (vérification robots.txt, choix du
+modèle, limites).
 
 ### 2. Vérifier / compléter
 

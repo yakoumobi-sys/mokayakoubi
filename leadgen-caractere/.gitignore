@@ -4,3 +4,11 @@ data/leads.json
 data/optout.json
 data/*.log
 out/
+
+# Composant Python (ScrapeGraphAI)
+scrape/.env
+scrape/out/
+scrape/__pycache__/
+scrape/.venv/
+scrape/venv/
+*.pyc

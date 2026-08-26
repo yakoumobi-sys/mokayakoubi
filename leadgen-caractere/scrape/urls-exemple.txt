@@ -1,0 +1,11 @@
+# Une URL par ligne. Les lignes commençant par # sont ignorées.
+# Remplacez par de vraies pages d'annuaires/fédérations/chambres de
+# commerce qui autorisent le scraping (le script vérifie robots.txt).
+#
+# Exemples de types de pages utiles pour Caractère :
+# - page d'une fédération sportive listant ses clubs affiliés par wilaya
+# - annuaire d'une chambre de commerce et d'industrie (CCI) locale
+# - page "nos adhérents" d'une association professionnelle
+#
+# https://exemple-federation.dz/clubs-affilies/alger
+# https://exemple-cci.dz/annuaire-entreprises
