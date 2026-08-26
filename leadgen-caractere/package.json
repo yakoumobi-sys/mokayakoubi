@@ -1,0 +1,20 @@
+{
+  "name": "leadgen-caractere",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Outil de prospection pour Caractère : recherche de leads (entreprises, clubs, écoles, associations...) et génération d'emails + messages WhatsApp pré-remplis pour la vente de textiles personnalisés (t-shirts, polos, gilets, tote bags).",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "main": "cli.js",
+  "bin": {
+    "leadgen": "./cli.js"
+  },
+  "scripts": {
+    "leadgen": "node cli.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}

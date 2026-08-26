@@ -1,0 +1,1 @@
+Bonjour {{lead_name}} 👋 Je vous contacte de la part de {{company}}, spécialiste du textile personnalisé (t-shirts, polos, gilets, tote bags). Seriez-vous intéressé(e) pour équiper votre équipe ou vos événements avec des tenues à vos couleurs ? Je peux vous envoyer quelques exemples si vous le souhaitez.

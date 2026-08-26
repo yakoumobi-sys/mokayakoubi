@@ -1,0 +1,24 @@
+SUBJECT: {{company}} × {{lead_name}} — des textiles personnalisés à votre image
+
+Bonjour,
+
+Je me permets de vous contacter au nom de {{company}}, spécialiste du textile
+personnalisé : t-shirts, polos, gilets et tote bags floqués ou brodés aux
+couleurs de votre structure.
+
+Que ce soit pour votre équipe, vos événements, vos adhérents ou vos clients,
+nous accompagnons des entreprises, associations, clubs et écoles comme la
+vôtre dans la création de tenues et goodies personnalisés, du petit lot
+jusqu'aux grandes quantités.
+
+Seriez-vous disponible pour un échange rapide afin de voir si nous pouvons
+vous accompagner sur un prochain projet ?
+
+Bien cordialement,
+{{signature_name}}
+{{company}}
+{{signature_phone}}
+
+--
+Vous ne souhaitez plus recevoir nos messages ? Répondez simplement "STOP" à
+cet email ou écrivez-nous à {{unsubscribe}}.
