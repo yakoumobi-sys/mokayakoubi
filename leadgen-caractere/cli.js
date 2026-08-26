@@ -54,6 +54,22 @@ Commandes disponibles :
       {{city}} dans les messages et pour filtrer plus tard).
       Exemple : node cli.js search:places --query "club de sport à Alger" --city Alger
 
+  search:batch [fichier.json] [--max-pages 2] [--pause 1500]
+      Enchaîne plusieurs recherches Google Places définies dans un fichier
+      JSON (par défaut : config/plan-algerie.json, qui couvre déjà Alger,
+      Oran, Constantine, Annaba, Sétif, Blida, Tizi Ouzou, Béjaïa et Tlemcen
+      sur les secteurs clubs sportifs, associations, écoles privées, agences
+      événementielles et salles des fêtes). Modifiez ce fichier ou fournissez
+      le vôtre pour cibler d'autres villes/secteurs.
+      Attention au quota/coût de l'API Google Places sur un gros lot.
+
+  show <id>
+      Affiche le détail complet d'un lead (toutes les colonnes + notes).
+
+  status <id> <nouveau_statut>
+      Change le statut d'un lead (ex: responded, won, lost) sans éditer
+      data/leads.json à la main.
+
   import:csv <fichier.csv>
       Importe des leads depuis un fichier CSV (colonnes: name, category,
       city, address, phone, email, website — voir sample/leads-exemple.csv).
@@ -108,6 +124,83 @@ async function cmdSearchPlaces(args) {
   const leads = results.map((r) => ({ ...r, phoneE164: r.phoneE164 || toE164(r.phone) }));
   const { added, updated } = store.upsertLeads(leads);
   console.log(`Trouvé ${results.length} résultat(s). Nouveaux leads: ${added}, complétés: ${updated}.`);
+}
+
+async function cmdSearchBatch(args) {
+  if (!process.env.GOOGLE_PLACES_API_KEY) {
+    console.error("GOOGLE_PLACES_API_KEY manquant. Ajoutez-le dans votre fichier .env (voir .env.example).");
+    process.exit(1);
+  }
+  const file = args._[1] && !args._[1].startsWith("--")
+    ? args._[1]
+    : path.join(__dirname, "config", "plan-algerie.json");
+  if (!fs.existsSync(file)) {
+    console.error(`Fichier introuvable: ${file}`);
+    process.exit(1);
+  }
+  const plan = JSON.parse(fs.readFileSync(file, "utf8"));
+  const maxPages = Number(args["max-pages"] || 2);
+  const pause = Number(args.pause || 1500);
+
+  console.log(`Plan de ${plan.length} recherche(s) chargé depuis ${file}.\n`);
+
+  let totalAdded = 0;
+  let totalUpdated = 0;
+
+  for (let i = 0; i < plan.length; i++) {
+    const entry = plan[i];
+    process.stdout.write(`[${i + 1}/${plan.length}] "${entry.query}"... `);
+    try {
+      const results = await places.searchText({
+        apiKey: process.env.GOOGLE_PLACES_API_KEY,
+        textQuery: entry.query,
+        maxPages,
+        city: entry.city,
+        category: entry.category,
+      });
+      const leads = results.map((r) => ({ ...r, phoneE164: r.phoneE164 || toE164(r.phone) }));
+      const { added, updated } = store.upsertLeads(leads);
+      totalAdded += added;
+      totalUpdated += updated;
+      console.log(`${results.length} résultat(s) — ${added} nouveaux, ${updated} complétés.`);
+    } catch (err) {
+      console.log(`échec: ${err.message}`);
+    }
+    if (i < plan.length - 1) await new Promise((r) => setTimeout(r, pause));
+  }
+
+  console.log(`\nTerminé. Total: ${totalAdded} nouveaux leads, ${totalUpdated} complétés.`);
+}
+
+function cmdShow(args) {
+  const id = args._[1];
+  if (!id) {
+    console.error("Usage: node cli.js show <id>");
+    process.exit(1);
+  }
+  const lead = store.loadLeads().find((l) => l.id === id);
+  if (!lead) {
+    console.error(`Aucun lead avec l'id ${id}`);
+    process.exit(1);
+  }
+  for (const [key, value] of Object.entries(lead)) {
+    console.log(`${key.padEnd(14)}: ${value === undefined || value === "" ? "-" : value}`);
+  }
+}
+
+function cmdStatus(args) {
+  const id = args._[1];
+  const newStatus = args._[2];
+  if (!id || !newStatus) {
+    console.error("Usage: node cli.js status <id> <nouveau_statut>");
+    process.exit(1);
+  }
+  const lead = store.updateLead(id, { status: newStatus });
+  if (!lead) {
+    console.error(`Aucun lead avec l'id ${id}`);
+    process.exit(1);
+  }
+  console.log(`${lead.name}: statut mis à jour -> ${newStatus}`);
 }
 
 function cmdImportCsv(args) {
@@ -289,6 +382,12 @@ async function main() {
   switch (command) {
     case "search:places":
       return cmdSearchPlaces(args);
+    case "search:batch":
+      return cmdSearchBatch(args);
+    case "show":
+      return cmdShow(args);
+    case "status":
+      return cmdStatus(args);
     case "import:csv":
       return cmdImportCsv(args);
     case "export:csv":

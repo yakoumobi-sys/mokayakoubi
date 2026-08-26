@@ -97,6 +97,22 @@ petites structures en Algérie qu'en Europe — comptez surtout sur le
 téléphone (WhatsApp) comme canal principal, l'email en complément quand il
 existe.
 
+**Pour ne pas taper toutes ces recherches à la main**, `search:batch` enchaîne
+une liste de recherches définie dans un fichier JSON :
+
+```bash
+node cli.js search:batch                       # utilise config/plan-algerie.json (30 requêtes prêtes à l'emploi)
+node cli.js search:batch mon-plan.json          # ou votre propre liste
+```
+
+`config/plan-algerie.json` couvre déjà Alger, Oran, Constantine, Annaba,
+Sétif, Blida, Tizi Ouzou, Béjaïa et Tlemcen sur les secteurs listés plus
+haut — dupliquez et adaptez ce fichier pour d'autres villes/secteurs.
+Chaque entrée est `{ "query": "...", "city": "...", "category": "..." }`.
+⚠️ Surveillez votre quota/coût Google Places sur un gros lot (`--max-pages`
+contrôle la profondeur de pagination par requête, `--pause` l'espacement
+entre deux requêtes en ms).
+
 Ou importez vos propres listes :
 
 ```bash
@@ -111,6 +127,8 @@ Colonnes acceptées : `name, category, city, address, phone, email, website`
 ```bash
 node cli.js stats
 node cli.js list --status new
+node cli.js show <id>              # détail complet d'un lead
+node cli.js status <id> won        # ou "responded", "lost"... suivi manuel du pipeline
 node cli.js enrich:emails --limit 20
 ```
 
@@ -161,15 +179,13 @@ node cli.js optout contact@exemple.fr
 - `out/` — fichiers générés (aperçus, exports, liens WhatsApp).
 
 Chaque lead a un statut : `new`, `contacted_email`, `contacted_whatsapp`,
-que vous pouvez faire évoluer manuellement (`responded`, `won`, `lost`...)
-en éditant `data/leads.json` ou via de futures commandes.
+que vous pouvez faire évoluer (`responded`, `won`, `lost`...) avec
+`node cli.js status <id> <statut>`.
 
 ---
 
 ## Aller plus loin (idées d'évolutions)
 
-- Ajouter un statut `responded` / `won` / `lost` mis à jour manuellement
-  pour suivre le pipeline commercial.
 - Compléter avec des imports CSV manuels depuis des annuaires professionnels
   algériens (CCI locales, ANDI, wilayas...) — il n'existe pas d'équivalent
   algérien gratuit à l'API SIRENE française pour l'instant.

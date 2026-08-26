@@ -1,0 +1,40 @@
+[
+  { "city": "Alger", "category": "club de sport", "query": "club de sport à Alger" },
+  { "city": "Alger", "category": "salle de sport", "query": "salle de sport à Alger" },
+  { "city": "Alger", "category": "association", "query": "association à Alger" },
+  { "city": "Alger", "category": "école privée", "query": "école privée à Alger" },
+  { "city": "Alger", "category": "agence événementielle", "query": "agence événementielle à Alger" },
+  { "city": "Alger", "category": "salle des fêtes", "query": "salle des fêtes à Alger" },
+
+  { "city": "Oran", "category": "club de sport", "query": "club de sport à Oran" },
+  { "city": "Oran", "category": "salle de sport", "query": "salle de sport à Oran" },
+  { "city": "Oran", "category": "association", "query": "association à Oran" },
+  { "city": "Oran", "category": "école privée", "query": "école privée à Oran" },
+  { "city": "Oran", "category": "agence événementielle", "query": "agence événementielle à Oran" },
+  { "city": "Oran", "category": "salle des fêtes", "query": "salle des fêtes à Oran" },
+
+  { "city": "Constantine", "category": "club de sport", "query": "club de sport à Constantine" },
+  { "city": "Constantine", "category": "association", "query": "association à Constantine" },
+  { "city": "Constantine", "category": "école privée", "query": "école privée à Constantine" },
+  { "city": "Constantine", "category": "agence événementielle", "query": "agence événementielle à Constantine" },
+  { "city": "Constantine", "category": "salle des fêtes", "query": "salle des fêtes à Constantine" },
+
+  { "city": "Annaba", "category": "club de sport", "query": "club de sport à Annaba" },
+  { "city": "Annaba", "category": "association", "query": "association à Annaba" },
+  { "city": "Annaba", "category": "agence événementielle", "query": "agence événementielle à Annaba" },
+  { "city": "Annaba", "category": "salle des fêtes", "query": "salle des fêtes à Annaba" },
+
+  { "city": "Sétif", "category": "club de sport", "query": "club de sport à Sétif" },
+  { "city": "Sétif", "category": "association", "query": "association à Sétif" },
+  { "city": "Sétif", "category": "agence événementielle", "query": "agence événementielle à Sétif" },
+  { "city": "Sétif", "category": "salle des fêtes", "query": "salle des fêtes à Sétif" },
+
+  { "city": "Blida", "category": "club de sport", "query": "club de sport à Blida" },
+  { "city": "Blida", "category": "salle des fêtes", "query": "salle des fêtes à Blida" },
+
+  { "city": "Tizi Ouzou", "category": "club de sport", "query": "club de sport à Tizi Ouzou" },
+  { "city": "Tizi Ouzou", "category": "association", "query": "association à Tizi Ouzou" },
+
+  { "city": "Béjaïa", "category": "club de sport", "query": "club de sport à Béjaïa" },
+  { "city": "Tlemcen", "category": "agence événementielle", "query": "agence événementielle à Tlemcen" }
+]
