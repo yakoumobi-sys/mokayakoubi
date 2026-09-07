@@ -119,6 +119,21 @@ export const startHere = {
   cta: 'Get it free',
 
   /**
+   * The file handed over after signup. Sits in /public.
+   * Empty = the form just confirms the signup with no download.
+   */
+  file: '/the-moka-playbook-fr.pdf',
+  fileCta: 'Download the PDF',
+
+  /**
+   * What happens when the email cannot be stored because no provider is
+   * configured yet (see .env.example):
+   *   true  → hand over the file anyway, so the main CTA never looks broken
+   *   false → show the error and withhold the file
+   */
+  deliverIfStorageFails: true,
+
+  /**
    * HOW THE CTA WORKS — pick one mode.
    *
    *  'email' → shows the inline email field on the site. Submissions go to
@@ -135,8 +150,8 @@ export const startHere = {
   /** TODO (only needed if mode === 'link'). */
   url: '',
 
-  /** Small reassurance line under the field. */
-  note: 'No spam. Unsubscribe anytime.',
+  /** Small print under the field. Says what people actually get. */
+  note: 'Edition 01 · 18-page PDF, in French · No spam, unsubscribe anytime.',
 } as const
 
 /* ---------------------------------------------------------------------------
@@ -225,7 +240,8 @@ export const resources: Resource[] = [
   {
     id: 'moka-playbook',
     title: 'The Moka Playbook',
-    description: 'Psychology, discipline, communication, selling, building.',
+    description:
+      '14 ideas on psychology, discipline, selling and building things. Edition 01, in French.',
     price: 'Free',
     url: '', // until it has its own page, the card points at the signup below
     anchor: '#start',

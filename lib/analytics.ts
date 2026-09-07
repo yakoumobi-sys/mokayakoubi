@@ -15,6 +15,7 @@ export const EVENTS = {
   startHere: 'cta_start_here',
   playbook: 'cta_playbook',
   playbookSuccess: 'playbook_subscribed',
+  playbookDownload: 'playbook_downloaded',
   project: 'cta_project',
   resource: 'cta_resource',
   contact: 'cta_contact',

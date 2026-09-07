@@ -38,6 +38,17 @@ export function PlaybookForm() {
         setMessage(data.message || "You're in.")
         setEmail('')
         track(EVENTS.playbookSuccess)
+      } else if (
+        response.status === 503 &&
+        startHere.deliverIfStorageFails &&
+        startHere.file
+      ) {
+        // No storage provider wired up yet. The file is free and ready, so
+        // hand it over rather than letting the site's main CTA dead-end.
+        setState('done')
+        setMessage('Here it is.')
+        setEmail('')
+        track(EVENTS.playbookSuccess, { stored: false })
       } else {
         setState('error')
         setMessage(data.message || 'Something went wrong. Please try again.')
@@ -50,12 +61,20 @@ export function PlaybookForm() {
 
   if (state === 'done') {
     return (
-      <p
-        role="status"
-        className="flex min-h-[3rem] items-center text-[0.9375rem] text-paper"
-      >
-        {message}
-      </p>
+      <div role="status">
+        <p className="text-[0.9375rem] text-paper">{message}</p>
+        {startHere.file && (
+          <a
+            href={startHere.file}
+            download
+            onClick={() => track(EVENTS.playbookDownload)}
+            className="btn-invert mt-5 w-full sm:w-auto"
+          >
+            {startHere.fileCta}
+            <Arrow />
+          </a>
+        )}
+      </div>
     )
   }
 
