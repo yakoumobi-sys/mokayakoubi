@@ -76,6 +76,19 @@ export function Footer() {
                       Email
                     </TrackedLink>
                   </li>
+                  {contact.altEmail.email && (
+                    <li>
+                      <TrackedLink
+                        href={`mailto:${contact.altEmail.email}`}
+                        external={false}
+                        event={EVENTS.contact}
+                        props={{ category: contact.altEmail.label }}
+                        className="text-[0.9375rem] link-muted"
+                      >
+                        {contact.altEmail.label}
+                      </TrackedLink>
+                    </li>
+                  )}
                 </ul>
               </nav>
             )}

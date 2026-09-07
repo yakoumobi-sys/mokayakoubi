@@ -30,11 +30,10 @@ export const profile = {
   /** Short line used under the social proof and in SEO. */
   role: 'Founder of Caractère & InvoiceDZ',
   /**
-   * Portrait photo. TODO: drop a file in /public (e.g. /public/moka.jpg)
-   * and set it here, e.g. '/moka.jpg'. Leave '' and the hero renders a
-   * clean typographic block instead — no placeholder face, no stock photo.
+   * Portrait photo (square works best). Leave '' and the hero falls back to
+   * a clean typographic block — no placeholder face, no stock photo.
    */
-  photo: '',
+  photo: '/moka.jpg',
   photoAlt: 'Moka Yakoubi',
 } as const
 
@@ -75,8 +74,25 @@ export type SocialLink = {
 }
 
 export const socialLinks: SocialLink[] = [
-  { id: 'instagram', label: 'Instagram', url: '', handle: '', primary: true }, // TODO
-  { id: 'tiktok', label: 'TikTok', url: '', handle: '' }, // TODO
+  {
+    id: 'instagram',
+    label: 'Instagram',
+    url: 'https://www.instagram.com/mokayakoubi',
+    handle: '@mokayakoubi',
+    primary: true,
+  },
+  {
+    id: 'tiktok',
+    label: 'TikTok',
+    url: 'https://www.tiktok.com/@mokayakoubi',
+    handle: '@mokayakoubi',
+  },
+  {
+    id: 'facebook',
+    label: 'Facebook',
+    // Share link — swap it for the page's own URL if you have one.
+    url: 'https://www.facebook.com/share/1aSE9keL4q/',
+  },
   { id: 'youtube', label: 'YouTube', url: '' }, // TODO
   { id: 'linkedin', label: 'LinkedIn', url: '' }, // TODO
   { id: 'x', label: 'X', url: '' }, // TODO
@@ -156,7 +172,7 @@ export const projects: Project[] = [
     name: 'Caractère',
     description:
       'Start a clothing brand or create custom apparel without dealing with production complexity.',
-    url: '', // TODO: https://…
+    url: '', // TODO: the Caractère site (caracterede.com?) — unverified, left empty
     image: '', // TODO: optional visual in /public
     status: 'Live',
     year: '',  // TODO: e.g. '2023'
@@ -168,10 +184,10 @@ export const projects: Project[] = [
   {
     id: 'invoicedz',
     name: 'InvoiceDZ',
-    // NOTE: neutral placeholder — nothing about InvoiceDZ existed in the
-    // project, so nothing was invented. Rewrite this line freely.
-    description: 'Invoicing and business paperwork, made simple.',
-    url: '', // TODO: https://…
+    // Taken from the product itself. Social handle: @invoicedz.
+    description:
+      'Invoices, quotes and delivery notes built for Algeria — VAT, stamp duty and amounts in words handled for you. Free.',
+    url: 'https://invoice-dz.vercel.app',
     image: '',
     status: 'Live',
     year: '', // TODO
@@ -262,11 +278,13 @@ export const stats = {
 
 export const contact = {
   title: 'Work with me.',
-  /**
-   * Contact address. This one comes from the repository's own setup notes —
-   * replace it if you'd rather use a dedicated brand address.
-   */
+  /** Main address — everything on this page goes here. */
   email: 'yakoumobi@gmail.com',
+  /**
+   * Optional second address shown in the footer under its own label.
+   * Set `email: ''` to hide it.
+   */
+  altEmail: { label: 'Caractère', email: 'contact@caracterede.com' },
   /** Optional: a form URL (Tally, Typeform…). If set, it replaces mailto. */
   formUrl: '', // TODO (optional)
   cta: 'Get in touch',

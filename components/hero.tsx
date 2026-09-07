@@ -15,12 +15,14 @@ export function Hero() {
     <section id="top" className="relative pt-28 sm:pt-36 lg:pt-44">
       <div className="shell">
         <div
-          className={`grid items-end gap-10 lg:gap-16 ${
-            hasPhoto ? 'lg:grid-cols-[1.15fr_0.85fr]' : ''
-          }`}
+          className={
+            hasPhoto
+              ? 'grid gap-8 sm:gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:gap-16'
+              : ''
+          }
         >
           <div>
-            <p className="enter enter-1 eyebrow mb-8 sm:mb-10">
+            <p className="enter enter-1 eyebrow mb-7 sm:mb-10">
               {profile.locationFlag} {profile.location}
             </p>
 
@@ -64,15 +66,20 @@ export function Hero() {
           </div>
 
           {hasPhoto && (
-            <div className="enter enter-3 relative aspect-[4/5] w-full overflow-hidden rounded-lg bg-surface">
-              <Image
-                src={profile.photo}
-                alt={profile.photoAlt}
-                fill
-                priority
-                sizes="(max-width: 1024px) 100vw, 40vw"
-                className="object-cover"
-              />
+            /* Small square on mobile so the hero stays short, full column on
+               desktop. Sits above the name on phones — the face is what people
+               arriving from a Reel recognise first. */
+            <div className="enter order-first lg:order-none">
+              <div className="relative aspect-square w-28 overflow-hidden rounded-lg bg-surface sm:w-36 lg:w-full">
+                <Image
+                  src={profile.photo}
+                  alt={profile.photoAlt}
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 160px, 45vw"
+                  className="object-cover"
+                />
+              </div>
             </div>
           )}
         </div>

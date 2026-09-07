@@ -26,7 +26,7 @@ const config: Config = {
       },
       fontSize: {
         // Editorial display scale — fluid, mobile first.
-        display: ['clamp(2.75rem, 12vw, 6.5rem)', { lineHeight: '0.94', letterSpacing: '-0.045em' }],
+        display: ['clamp(2.75rem, 11.5vw, 5.5rem)', { lineHeight: '0.94', letterSpacing: '-0.045em' }],
         headline: ['clamp(2rem, 7vw, 3.75rem)', { lineHeight: '1.02', letterSpacing: '-0.035em' }],
         title: ['clamp(1.5rem, 4.5vw, 2.25rem)', { lineHeight: '1.1', letterSpacing: '-0.025em' }],
         lede: ['clamp(1.0625rem, 2.4vw, 1.25rem)', { lineHeight: '1.5', letterSpacing: '-0.011em' }],
