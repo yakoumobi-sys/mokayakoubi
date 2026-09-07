@@ -20,7 +20,7 @@ export async function POST(request: Request) {
 
   if (!email || email.length > 254 || !EMAIL_PATTERN.test(email)) {
     return NextResponse.json(
-      { message: 'Please enter a valid email address.' },
+      { message: 'Please enter a valid email address.', reason: 'invalid_email' },
       { status: 400 }
     )
   }
@@ -39,19 +39,22 @@ export async function POST(request: Request) {
     if (result.reason === 'not_configured') {
       // Honest failure: the form is real, the destination just isn't set yet.
       return NextResponse.json(
-        { message: 'Signups are not open yet. Try again shortly.' },
+        {
+          message: 'Signups are not open yet. Try again shortly.',
+          reason: 'not_configured',
+        },
         { status: 503 }
       )
     }
 
     return NextResponse.json(
-      { message: 'Something went wrong. Please try again.' },
+      { message: 'Something went wrong. Please try again.', reason: 'storage_failed' },
       { status: 502 }
     )
   } catch (error) {
     console.error('[subscribe]', error)
     return NextResponse.json(
-      { message: 'Something went wrong. Please try again.' },
+      { message: 'Something went wrong. Please try again.', reason: 'storage_failed' },
       { status: 500 }
     )
   }

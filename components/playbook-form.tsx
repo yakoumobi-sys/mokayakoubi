@@ -8,6 +8,16 @@ import { EVENTS, track } from '@/lib/analytics'
 type State = 'idle' | 'loading' | 'done' | 'error'
 
 /**
+ * A bad address is the visitor's to fix, so it always shows the error.
+ * Any other failure is ours (no provider configured, the provider rejected
+ * the write, the network dropped) and must not cost them the download.
+ */
+function canDeliverAnyway(reason?: string): boolean {
+  if (!startHere.deliverIfStorageFails || !startHere.file) return false
+  return reason !== 'invalid_email'
+}
+
+/**
  * The one form on the site. It posts to /api/subscribe, which stores the
  * address wherever the project is configured to (see lib/subscribers.ts).
  * If nothing is configured yet the API says so and the visitor sees a real
@@ -31,31 +41,37 @@ export function PlaybookForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, source: 'playbook' }),
       })
-      const data = (await response.json().catch(() => ({}))) as { message?: string }
+      const data = (await response.json().catch(() => ({}))) as {
+        message?: string
+        reason?: string
+      }
 
       if (response.ok) {
         setState('done')
         setMessage(data.message || "You're in.")
         setEmail('')
         track(EVENTS.playbookSuccess)
-      } else if (
-        response.status === 503 &&
-        startHere.deliverIfStorageFails &&
-        startHere.file
-      ) {
-        // No storage provider wired up yet. The file is free and ready, so
-        // hand it over rather than letting the site's main CTA dead-end.
+      } else if (canDeliverAnyway(data.reason)) {
+        // The address could not be stored (no provider, or the provider
+        // rejected it). The file is free and already on the server, so hand
+        // it over rather than letting the site's main CTA dead-end.
         setState('done')
         setMessage('Here it is.')
         setEmail('')
-        track(EVENTS.playbookSuccess, { stored: false })
+        track(EVENTS.playbookSuccess, { stored: false, reason: data.reason })
       } else {
         setState('error')
         setMessage(data.message || 'Something went wrong. Please try again.')
       }
     } catch {
-      setState('error')
-      setMessage('Network error. Please try again.')
+      if (canDeliverAnyway('network_error')) {
+        setState('done')
+        setMessage('Here it is.')
+        track(EVENTS.playbookSuccess, { stored: false, reason: 'network_error' })
+      } else {
+        setState('error')
+        setMessage('Network error. Please try again.')
+      }
     }
   }
 
