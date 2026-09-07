@@ -172,7 +172,9 @@ export const projects: Project[] = [
     name: 'Caractère',
     description:
       'Start a clothing brand or create custom apparel without dealing with production complexity.',
-    url: '', // TODO: the Caractère site (caracterede.com?) — unverified, left empty
+    // Production domain of the caractere-store project (also reachable at
+    // caracterestore.com and mycaractere.xyz).
+    url: 'https://caracteredz.com',
     image: '', // TODO: optional visual in /public
     status: 'Live',
     year: '',  // TODO: e.g. '2023'
@@ -284,6 +286,8 @@ export const contact = {
    * Optional second address shown in the footer under its own label.
    * Set `email: ''` to hide it.
    */
+  // NOTE: caracterede.com does not resolve — the Caractère domain is
+  // caracteredz.com. Confirm the exact address before relying on this link.
   altEmail: { label: 'Caractère', email: 'contact@caracterede.com' },
   /** Optional: a form URL (Tally, Typeform…). If set, it replaces mailto. */
   formUrl: '', // TODO (optional)
