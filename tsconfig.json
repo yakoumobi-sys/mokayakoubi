@@ -7,18 +7,17 @@
     "moduleResolution": "bundler",
     "allowJs": true,
     "strict": true,
+    "noUnusedLocals": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "skipLibCheck": true,
+    "incremental": true,
+    "plugins": [{ "name": "next" }],
     "baseUrl": ".",
-    "paths": {
-      "@/*": ["./*"]
-    }
+    "paths": { "@/*": ["./*"] }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]

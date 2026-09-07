@@ -2,56 +2,195 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* ==========================================================================
+   TOKENS
+   Black / white / three greys. Nothing else.
+   ========================================================================== */
+
+@layer base {
+  :root {
+    --ink: 10 10 10;        /* near-black text */
+    --paper: 255 255 255;   /* page background */
+    --muted: 92 92 98;      /* secondary text — AA on white (6.6:1) */
+    --faint: 114 114 120;   /* tertiary text, eyebrows — AA on white (4.8:1) */
+    --line: 229 229 232;    /* hairlines */
+    --surface: 247 247 248; /* subtle panels */
+
+    color-scheme: light;
+  }
+
+  * {
+    border-color: rgb(var(--line));
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    /* offset for the sticky nav when jumping to #anchors */
+    scroll-padding-top: 4.5rem;
+  }
+
+  body {
+    background-color: rgb(var(--paper));
+    color: rgb(var(--ink));
+    font-feature-settings: 'ss01', 'cv05';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: rgb(var(--ink));
+    color: rgb(var(--paper));
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--ink));
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }
 
-html {
-  scroll-behavior: smooth;
+/* ==========================================================================
+   PRIMITIVES
+   ========================================================================== */
+
+@layer components {
+  .shell {
+    @apply mx-auto w-full max-w-shell px-5 sm:px-8 lg:px-10;
+  }
+
+  /* Consistent vertical rhythm for every section. */
+  .section {
+    @apply py-16 sm:py-24 lg:py-32;
+  }
+
+  .eyebrow {
+    @apply text-eyebrow font-medium uppercase text-faint;
+  }
+
+  /* --- Buttons: exactly two variants + one text link ---------------------- */
+
+  .btn {
+    @apply inline-flex min-h-[3rem] items-center justify-center gap-2 rounded-full
+           px-6 text-[0.9375rem] font-medium leading-none tracking-[-0.01em]
+           transition-[background-color,color,border-color,transform] duration-200 ease-out
+           active:scale-[0.985];
+  }
+
+  .btn-primary {
+    @apply btn bg-ink text-paper hover:bg-ink/85;
+  }
+
+  .btn-secondary {
+    @apply btn border border-line bg-transparent text-ink hover:border-ink/40 hover:bg-surface;
+  }
+
+  .btn-invert {
+    @apply btn bg-paper text-ink hover:bg-paper/90;
+  }
+
+  .link-arrow {
+    @apply inline-flex items-center gap-1.5 text-[0.9375rem] font-medium text-ink
+           transition-colors duration-200 hover:text-muted;
+  }
+
+  .link-arrow svg {
+    @apply transition-transform duration-200 ease-out;
+  }
+
+  .link-arrow:hover svg {
+    transform: translateX(3px);
+  }
+
+  .link-muted {
+    @apply text-muted transition-colors duration-200 hover:text-ink;
+  }
+
+  /* --- Card ------------------------------------------------------------- */
+
+  .card {
+    @apply relative flex flex-col rounded-lg border border-line bg-paper p-6
+           transition-colors duration-300 sm:p-8;
+  }
+
+  a.card:hover,
+  .card-hoverable:hover {
+    @apply border-ink/25 bg-surface;
+  }
+
+  .hairline {
+    @apply h-px w-full bg-line;
+  }
 }
 
-body {
-  background-color: #ffffff;
-  color: #000000;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* ==========================================================================
+   SCROLL REVEAL — no animation library, no layout shift
+   ========================================================================== */
+
+@layer utilities {
+  .reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+
+  .balance {
+    text-wrap: balance;
+  }
+
+  .pretty {
+    text-wrap: pretty;
+  }
+
+  /* Hero entrance: pure CSS, runs on first paint, never blocks the LCP text. */
+  .enter {
+    animation: enter 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .enter-1 { animation-delay: 0.04s; }
+  .enter-2 { animation-delay: 0.12s; }
+  .enter-3 { animation-delay: 0.2s; }
+  .enter-4 { animation-delay: 0.28s; }
 }
 
-/* Animations */
-@keyframes fadeIn {
+@keyframes enter {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
   }
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
