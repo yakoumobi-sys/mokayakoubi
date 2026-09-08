@@ -23,26 +23,47 @@ No environment variable is required to run or build the site.
 
 ---
 
+## Three languages
+
+| URL | Language | Direction |
+| --- | --- | --- |
+| `/` | English | LTR |
+| `/fr` | Français | LTR |
+| `/ar` | العربية | RTL |
+
+English stays at `/` so the link in the Instagram bio never moves. `/en`
+redirects there. Each language is a real, statically generated page with its
+own `<title>`, description, canonical and `hreflang` — shareable and
+indexable. The switcher (EN · FR · ع) sits in the header and the footer.
+
+To add a language: add it to `LOCALES` in `config/content/types.ts`, write
+`config/content/<code>.ts` against the `Content` type, and export it from
+`config/content/index.ts`. Set `dir: 'rtl'` and the whole layout mirrors.
+
 ## Edit the content
 
-**Everything lives in [`config/site.ts`](config/site.ts).** Components never
-hardcode text, numbers or URLs — change the config and the whole site follows.
+Two files to know:
 
-| Block | What it controls |
-| --- | --- |
-| `profile` | Name, tagline, one-liner, location, portrait photo |
-| `site` | Canonical URL, SEO title, description, keywords |
-| `socialLinks` | Instagram, TikTok, YouTube, LinkedIn, X — **empty links are hidden everywhere** |
-| `startHere` | The Moka Playbook block: copy, topics, and how the CTA behaves |
-| `projects` | Caractère, InvoiceDZ and anything you add next |
-| `resources` | The "Learn" grid — add an object, get a card |
-| `affiliateTools` | "Things I use" — hidden until you set `enabled: true` with real items |
-| `stats` | 220K+, 8.8M… the numbers that change |
-| `contact` | Email / form URL and the three "Work with me" categories |
-| `navigation` | Nav items |
-| `analytics` | Which analytics provider to load (one at a time) |
+- **[`config/site.ts`](config/site.ts)** — everything that does *not* change
+  with the language: URLs, images, numbers, which sections are on, analytics.
+- **`config/content/en.ts` · `fr.ts` · `ar.ts`** — every word on the site,
+  typed against one shared `Content` shape so a missing string is a build error.
 
-Anything marked `// TODO` in that file is intentionally empty — nothing was
+| Block | Lives in | What it controls |
+| --- | --- | --- |
+| `profile` | both | Name and photo in `site.ts`; tagline, one-liner, location in `content/` |
+| `site` | `site.ts` | Canonical URL, keywords |
+| `socialLinks` | `site.ts` | Instagram, TikTok, Facebook… — **empty links are hidden everywhere** |
+| `startHere` | both | How the CTA behaves in `site.ts`; every word in `content/` |
+| `projects` | both | URL, image, year in `site.ts`; name and description per language |
+| `resources` | both | The "Learn" grid — add to both, get a card |
+| `affiliateTools` | `site.ts` | "Things I use" — hidden until `enabled: true` with real items |
+| `stats` | both | The numbers in `site.ts`, their labels in `content/` |
+| `contact` | both | Addresses in `site.ts`, the three categories in `content/` |
+| `navigation` | both | Anchors in `site.ts`, labels in `content/` |
+| `analytics` | `site.ts` | Which provider to load (one at a time) |
+
+Anything marked `// TODO` in `site.ts` is intentionally empty — nothing was
 invented. The UI degrades gracefully: no URL means no button, not a dead link.
 
 ### Adding a photo
@@ -90,14 +111,16 @@ Every CTA is already instrumented — see `EVENTS` in
 
 ```
 app/
-  layout.tsx            metadata, fonts, Person structured data, analytics
-  page.tsx              section composition
-  globals.css           design tokens + primitives
-  opengraph-image.tsx   OG image, generated at build
+  [[...lang]]/
+    layout.tsx          html lang/dir, fonts, structured data, analytics
+    page.tsx            section composition, per-locale metadata
+  globals.css           design tokens + primitives (incl. RTL rules)
+  opengraph-image.tsx   share card, generated at build
   icon.tsx              favicon, generated at build
   sitemap.ts robots.ts
   api/subscribe/        email capture endpoint
 components/             one file per section, plus ui/ primitives
-config/site.ts          ← all content and URLs
-lib/                    analytics, subscriber providers, supabase (optional)
+config/site.ts          ← structure, links, numbers
+config/content/         ← every word, one file per language
+lib/                    analytics, locale paths, subscriber providers, supabase
 ```

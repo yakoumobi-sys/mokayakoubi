@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Instrument_Serif } from 'next/font/google'
+import { Inter, Instrument_Serif, IBM_Plex_Sans_Arabic } from 'next/font/google'
 import { Nav } from '@/components/nav'
 import { Analytics } from '@/components/analytics'
+import { getContent, isLocale, DEFAULT_LOCALE, type Locale } from '@/config/content'
 import { contact, profile, projects, site, socialLinks } from '@/config/site'
-import './globals.css'
+import { localePath } from '@/lib/locale'
+import '../globals.css'
 
 const sans = Inter({
   subsets: ['latin'],
@@ -19,30 +21,20 @@ const serif = Instrument_Serif({
   variable: '--font-serif',
 })
 
+/** Only pulled in on the Arabic page — never preloaded on the others. */
+const arabic = IBM_Plex_Sans_Arabic({
+  subsets: ['arabic'],
+  weight: ['400', '500', '600'],
+  display: 'swap',
+  preload: false,
+  variable: '--font-arabic',
+})
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: {
-    default: site.title,
-    template: `%s — ${profile.name}`,
-  },
-  description: site.description,
   keywords: [...site.keywords],
   authors: [{ name: profile.name, url: site.url }],
   creator: profile.name,
-  alternates: { canonical: '/' },
-  openGraph: {
-    type: 'website',
-    url: site.url,
-    siteName: profile.name,
-    title: site.title,
-    description: site.description,
-    locale: 'en_US',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: site.title,
-    description: site.description,
-  },
   robots: {
     index: true,
     follow: true,
@@ -58,37 +50,38 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 }
 
+function readLocale(params: { lang?: string[] }): Locale {
+  const segment = params.lang?.[0]
+  return segment && isLocale(segment) ? segment : DEFAULT_LOCALE
+}
+
 /** Person (+ the companies he founded) for search engines. */
-function StructuredData() {
-  const knownProjects = projects.filter((project) => project.url)
+function StructuredData({ locale }: { locale: Locale }) {
+  const t = getContent(locale)
+  const knownProjects = projects.filter((project) => project.url && t.projects[project.id])
+  const sameAs = socialLinks.map((link) => link.url).filter(Boolean)
 
   const person = {
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: profile.name,
     alternateName: profile.alternateName,
-    url: site.url,
-    description: site.description,
+    url: `${site.url}${localePath(locale) === '/' ? '' : localePath(locale)}`,
+    description: t.meta.description,
     jobTitle: 'Founder',
-    address: {
-      '@type': 'PostalAddress',
-      addressCountry: profile.countryCode,
-    },
+    address: { '@type': 'PostalAddress', addressCountry: profile.countryCode },
     ...(contact.email ? { email: `mailto:${contact.email}` } : {}),
     ...(profile.photo ? { image: `${site.url}${profile.photo}` } : {}),
     ...(knownProjects.length > 0
       ? {
           worksFor: knownProjects.map((project) => ({
             '@type': 'Organization',
-            name: project.name,
+            name: t.projects[project.id].name,
             url: project.url,
           })),
         }
       : {}),
-    ...((): Record<string, string[]> => {
-      const sameAs = socialLinks.map((link) => link.url).filter(Boolean)
-      return sameAs.length > 0 ? { sameAs } : {}
-    })(),
+    ...(sameAs.length > 0 ? { sameAs } : {}),
   }
 
   return (
@@ -99,19 +92,32 @@ function StructuredData() {
   )
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode
+  params: { lang?: string[] }
+}) {
+  const locale = readLocale(params)
+  const t = getContent(locale)
+
   return (
-    <html lang={site.locale} className={`${sans.variable} ${serif.variable}`}>
+    <html
+      lang={locale}
+      dir={t.dir}
+      className={`${sans.variable} ${serif.variable} ${arabic.variable}`}
+    >
       <head>
         {/* Without JS the reveal animation must never hide content. */}
         <noscript>
           <style>{`.reveal{opacity:1 !important;transform:none !important}`}</style>
         </noscript>
       </head>
-      <body className="font-sans antialiased">
-        <Nav />
+      <body className={`antialiased ${t.dir === 'rtl' ? 'font-arabic' : 'font-sans'}`}>
+        <Nav t={t} />
         {children}
-        <StructuredData />
+        <StructuredData locale={locale} />
         <Analytics />
       </body>
     </html>

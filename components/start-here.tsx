@@ -1,4 +1,5 @@
 import { startHere } from '@/config/site'
+import type { Content } from '@/config/content'
 import { Arrow } from '@/components/ui/arrow'
 import { Reveal } from '@/components/ui/reveal'
 import { PlaybookForm } from '@/components/playbook-form'
@@ -9,20 +10,20 @@ import { EVENTS } from '@/lib/analytics'
  * The most important block after the hero. Inverted so the eye lands on it
  * on the way down the page.
  */
-export function StartHere() {
+export function StartHere({ t }: { t: Content }) {
   return (
     <section id="start" className="scroll-mt-16 bg-ink text-paper">
       <div className="shell section">
         <div className="grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-20">
           <Reveal>
             <p className="text-eyebrow font-medium uppercase text-white/60">
-              {startHere.eyebrow}
+              {t.startHere.eyebrow}
             </p>
             <h2 className="mt-5 text-headline font-semibold balance">
-              {startHere.title}
+              {t.startHere.title}
             </h2>
             <p className="mt-6 max-w-prose text-lede text-white/70 pretty">
-              {startHere.description}
+              {t.startHere.description}
             </p>
 
             <div className="mt-10">
@@ -33,18 +34,18 @@ export function StartHere() {
                   props={{ place: 'start_here', mode: 'link' }}
                   className="btn-invert w-full sm:w-auto"
                 >
-                  {startHere.cta}
+                  {t.startHere.cta}
                   <Arrow />
                 </TrackedLink>
               ) : (
-                <PlaybookForm />
+                <PlaybookForm t={t} />
               )}
             </div>
           </Reveal>
 
           <Reveal delay={80}>
             <ul className="lg:pt-2">
-              {startHere.topics.map((topic, index) => (
+              {t.startHere.topics.map((topic, index) => (
                 <li
                   key={topic}
                   className="flex items-baseline gap-5 border-t border-white/12 py-4 last:border-b"

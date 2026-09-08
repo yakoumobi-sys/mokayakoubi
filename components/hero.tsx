@@ -1,5 +1,7 @@
 import Image from 'next/image'
-import { profile, startHere } from '@/config/site'
+import { profile } from '@/config/site'
+import type { Content } from '@/config/content'
+import { localeHref } from '@/lib/locale'
 import { Arrow } from '@/components/ui/arrow'
 import { TrackedLink } from '@/components/ui/tracked-link'
 import { EVENTS } from '@/lib/analytics'
@@ -8,8 +10,9 @@ import { EVENTS } from '@/lib/analytics'
  * First view. Three seconds to say who this is and where to click.
  * Rendered on the server — the LCP text ships in the HTML.
  */
-export function Hero() {
+export function Hero({ t }: { t: Content }) {
   const hasPhoto = Boolean(profile.photo)
+  const href = (target: string) => localeHref(t.locale, target)
 
   return (
     <section id="top" className="relative pt-28 sm:pt-36 lg:pt-44">
@@ -23,7 +26,7 @@ export function Hero() {
         >
           <div>
             <p className="enter enter-1 eyebrow mb-7 sm:mb-10">
-              {profile.locationFlag} {profile.location}
+              {profile.locationFlag} {t.profile.location}
             </p>
 
             <h1 className="enter enter-2">
@@ -31,7 +34,7 @@ export function Hero() {
                 {profile.name}
               </span>
               <span className="mt-4 block text-display font-semibold">
-                {profile.tagline.map((line) => (
+                {t.profile.tagline.map((line) => (
                   <span key={line} className="block">
                     {line}
                   </span>
@@ -40,27 +43,27 @@ export function Hero() {
             </h1>
 
             <p className="enter enter-3 mt-7 max-w-prose text-lede text-muted pretty sm:mt-8">
-              {profile.description}
+              {t.profile.description}
             </p>
 
             <div className="enter enter-4 mt-9 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:items-center sm:gap-4">
               <TrackedLink
-                href="#start"
+                href={href('#start')}
                 event={EVENTS.startHere}
                 props={{ place: 'hero' }}
                 className="btn-primary w-full sm:w-auto"
               >
-                {startHere.eyebrow}
+                {t.nav.startCta}
                 <Arrow />
               </TrackedLink>
 
               <TrackedLink
-                href="#projects"
+                href={href('#projects')}
                 event={EVENTS.nav}
-                props={{ label: 'Explore my projects' }}
+                props={{ label: 'hero_projects' }}
                 className="btn-secondary w-full sm:w-auto"
               >
-                Explore my projects
+                {t.hero.secondaryCta}
               </TrackedLink>
             </div>
           </div>
@@ -86,7 +89,7 @@ export function Hero() {
 
         {/* Quiet editorial footer to the hero. */}
         <div className="enter enter-4 mt-16 border-t border-line pt-5 sm:mt-24">
-          <p className="text-[0.8125rem] text-faint">{profile.role}</p>
+          <p className="text-[0.8125rem] text-faint">{t.profile.role}</p>
         </div>
       </div>
     </section>

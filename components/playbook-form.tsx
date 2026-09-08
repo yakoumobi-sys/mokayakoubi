@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { startHere } from '@/config/site'
+import type { Content } from '@/config/content'
 import { Arrow } from '@/components/ui/arrow'
 import { EVENTS, track } from '@/lib/analytics'
 
@@ -19,11 +20,10 @@ function canDeliverAnyway(reason?: string): boolean {
 
 /**
  * The one form on the site. It posts to /api/subscribe, which stores the
- * address wherever the project is configured to (see lib/subscribers.ts).
- * If nothing is configured yet the API says so and the visitor sees a real
- * message — no fake "thanks!".
+ * address wherever the project is configured to (see lib/subscribers.ts),
+ * then hands over the file.
  */
-export function PlaybookForm() {
+export function PlaybookForm({ t }: { t: Content }) {
   const [email, setEmail] = useState('')
   const [state, setState] = useState<State>('idle')
   const [message, setMessage] = useState('')
@@ -33,44 +33,46 @@ export function PlaybookForm() {
     if (state === 'loading') return
 
     setState('loading')
-    track(EVENTS.playbook, { place: 'start_here' })
+    track(EVENTS.playbook, { place: 'start_here', locale: t.locale })
 
     try {
       const response = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, source: 'playbook' }),
+        body: JSON.stringify({ email, source: `playbook_${t.locale}` }),
       })
-      const data = (await response.json().catch(() => ({}))) as {
-        message?: string
-        reason?: string
-      }
+      const data = (await response.json().catch(() => ({}))) as { reason?: string }
 
       if (response.ok) {
         setState('done')
-        setMessage(data.message || "You're in.")
+        setMessage(t.startHere.done)
         setEmail('')
-        track(EVENTS.playbookSuccess)
+        track(EVENTS.playbookSuccess, { stored: true })
       } else if (canDeliverAnyway(data.reason)) {
-        // The address could not be stored (no provider, or the provider
-        // rejected it). The file is free and already on the server, so hand
-        // it over rather than letting the site's main CTA dead-end.
+        // The address could not be stored. The file is free and already on
+        // the server, so hand it over rather than dead-ending the main CTA.
         setState('done')
-        setMessage('Here it is.')
+        setMessage(t.startHere.delivered)
         setEmail('')
         track(EVENTS.playbookSuccess, { stored: false, reason: data.reason })
       } else {
         setState('error')
-        setMessage(data.message || 'Something went wrong. Please try again.')
+        setMessage(
+          data.reason === 'invalid_email'
+            ? t.startHere.errors.invalid
+            : data.reason === 'not_configured'
+              ? t.startHere.errors.notOpen
+              : t.startHere.errors.generic
+        )
       }
     } catch {
       if (canDeliverAnyway('network_error')) {
         setState('done')
-        setMessage('Here it is.')
+        setMessage(t.startHere.delivered)
         track(EVENTS.playbookSuccess, { stored: false, reason: 'network_error' })
       } else {
         setState('error')
-        setMessage('Network error. Please try again.')
+        setMessage(t.startHere.errors.generic)
       }
     }
   }
@@ -83,10 +85,10 @@ export function PlaybookForm() {
           <a
             href={startHere.file}
             download
-            onClick={() => track(EVENTS.playbookDownload)}
+            onClick={() => track(EVENTS.playbookDownload, { locale: t.locale })}
             className="btn-invert mt-5 w-full sm:w-auto"
           >
-            {startHere.fileCta}
+            {t.startHere.fileCta}
             <Arrow />
           </a>
         )}
@@ -98,7 +100,7 @@ export function PlaybookForm() {
     <form onSubmit={onSubmit} noValidate className="w-full">
       <div className="flex flex-col gap-3 sm:flex-row">
         <label htmlFor="playbook-email" className="sr-only">
-          Email address
+          {t.startHere.emailLabel}
         </label>
         <input
           id="playbook-email"
@@ -107,11 +109,12 @@ export function PlaybookForm() {
           required
           autoComplete="email"
           inputMode="email"
-          placeholder="you@email.com"
+          dir="ltr"
+          placeholder={t.startHere.emailPlaceholder}
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           className="h-12 w-full flex-1 rounded-full border border-white/20 bg-transparent px-5
-                     text-[0.9375rem] text-paper placeholder:text-white/55
+                     text-start text-[0.9375rem] text-paper placeholder:text-white/55
                      transition-colors duration-200 focus:border-white/50 focus:outline-none
                      focus-visible:outline-none sm:max-w-sm"
         />
@@ -120,7 +123,7 @@ export function PlaybookForm() {
           disabled={state === 'loading'}
           className="btn-invert w-full disabled:opacity-60 sm:w-auto"
         >
-          {state === 'loading' ? 'Sending…' : startHere.cta}
+          {state === 'loading' ? t.startHere.sending : t.startHere.cta}
           {state !== 'loading' && <Arrow />}
         </button>
       </div>
@@ -129,7 +132,7 @@ export function PlaybookForm() {
         className={`mt-4 text-[0.8125rem] ${state === 'error' ? 'text-paper' : 'text-white/60'}`}
         role={state === 'error' ? 'alert' : undefined}
       >
-        {state === 'error' ? message : startHere.note}
+        {state === 'error' ? message : t.startHere.note}
       </p>
     </form>
   )

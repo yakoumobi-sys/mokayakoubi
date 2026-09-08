@@ -1,4 +1,5 @@
 import { affiliateTools } from '@/config/site'
+import type { Content } from '@/config/content'
 import { Reveal } from '@/components/ui/reveal'
 import { Section } from '@/components/ui/section'
 import { TrackedLink } from '@/components/ui/tracked-link'
@@ -8,20 +9,13 @@ import { EVENTS } from '@/lib/analytics'
  * Affiliate shelf. Hidden until `affiliateTools.enabled` is true AND there is
  * at least one real item — nothing is placeholdered here.
  */
-export function Tools() {
+export function Tools({ t }: { t: Content }) {
   if (!affiliateTools.enabled || affiliateTools.items.length === 0) return null
 
-  const categories = Array.from(
-    new Set(affiliateTools.items.map((tool) => tool.category))
-  )
+  const categories = Array.from(new Set(affiliateTools.items.map((tool) => tool.category)))
 
   return (
-    <Section
-      id="tools"
-      eyebrow="Stack"
-      title={affiliateTools.title}
-      intro={affiliateTools.subtitle}
-    >
+    <Section id="tools" eyebrow={t.tools.eyebrow} title={t.tools.title} intro={t.tools.subtitle}>
       <div className="mt-12 space-y-12 sm:mt-16">
         {categories.map((category) => (
           <Reveal key={category}>
@@ -56,8 +50,8 @@ export function Tools() {
         ))}
       </div>
 
-      {affiliateTools.disclosure && (
-        <p className="mt-8 text-[0.8125rem] text-faint">{affiliateTools.disclosure}</p>
+      {t.tools.disclosure && (
+        <p className="mt-8 text-[0.8125rem] text-faint">{t.tools.disclosure}</p>
       )}
     </Section>
   )

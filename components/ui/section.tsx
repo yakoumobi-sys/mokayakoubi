@@ -19,7 +19,6 @@ export function Section({
   title?: ReactNode
   intro?: ReactNode
   children?: ReactNode
-  /** hairline separator at the top of the section */
   bordered?: boolean
   className?: string
 }) {
@@ -32,12 +31,8 @@ export function Section({
         {(eyebrow || title || intro) && (
           <Reveal className="max-w-prose">
             {eyebrow && <p className="eyebrow mb-5">{eyebrow}</p>}
-            {title && (
-              <h2 className="text-headline font-semibold balance">{title}</h2>
-            )}
-            {intro && (
-              <p className="mt-5 text-lede text-muted pretty">{intro}</p>
-            )}
+            {title && <h2 className="text-headline font-semibold balance">{title}</h2>}
+            {intro && <p className="mt-5 text-lede text-muted pretty">{intro}</p>}
           </Reveal>
         )}
         {children}

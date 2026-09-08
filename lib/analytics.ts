@@ -21,6 +21,7 @@ export const EVENTS = {
   contact: 'cta_contact',
   social: 'cta_social',
   nav: 'nav_click',
+  language: 'language_switch',
 } as const
 
 export type EventName = (typeof EVENTS)[keyof typeof EVENTS]

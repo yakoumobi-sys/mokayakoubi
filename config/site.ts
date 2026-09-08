@@ -1,34 +1,28 @@
 /* ============================================================================
- *  SITE CONFIGURATION — THE ONLY FILE YOU NEED TO EDIT
+ *  SITE CONFIGURATION — STRUCTURE, LINKS AND NUMBERS
  * ============================================================================
  *
- *  Everything on the site (text, links, numbers, products, projects) lives
- *  here. Components never hardcode content.
+ *  This file holds everything that does NOT change with the language:
+ *  URLs, images, numbers, which sections are on, analytics.
+ *
+ *  ➜ All the WORDS live in config/content/en.ts, fr.ts and ar.ts.
  *
  *  ⚠️  ANYTHING MARKED  // TODO  IS EMPTY ON PURPOSE.
- *      Nothing was invented. Empty strings are handled gracefully:
- *      links with no URL are hidden, sections with no items are hidden.
- *      Fill them in and the site picks them up automatically.
+ *      Nothing was invented. Empty links are hidden everywhere, empty
+ *      sections are not rendered. Fill them in and the site picks them up.
  *
  * ========================================================================= */
 
 /* ---------------------------------------------------------------------------
- * 1. PROFILE
+ * 1. PROFILE (language-independent bits)
  * ------------------------------------------------------------------------ */
 
 export const profile = {
   name: 'Moka Yakoubi',
   /** Used for SEO only (real name variant people search for). */
   alternateName: 'Mohammed Yakoubi',
-  /** The three-line positioning statement in the hero. */
-  tagline: ['Psychology.', 'Discipline.', 'Building things.'],
-  /** One line under the tagline. Keep it short. */
-  description: 'I build companies and share what I learn.',
-  location: 'Algeria',
   locationFlag: '🇩🇿',
   countryCode: 'DZ',
-  /** Short line used under the social proof and in SEO. */
-  role: 'Founder of Caractère & InvoiceDZ',
   /**
    * Portrait photo (square works best). Leave '' and the hero falls back to
    * a clean typographic block — no placeholder face, no stock photo.
@@ -44,10 +38,6 @@ export const profile = {
 export const site = {
   /** Canonical origin. Change to https://mokayakoubi.com when the domain moves. */
   url: 'https://mokayakoubi.vercel.app',
-  title: 'Moka Yakoubi — Psychology. Discipline. Building things.',
-  description:
-    'Moka Yakoubi builds companies from Algeria — Caractère and InvoiceDZ — and shares what he learns about psychology, discipline and building things.',
-  locale: 'en',
   keywords: [
     'Moka Yakoubi',
     'Mohammed Yakoubi',
@@ -59,17 +49,16 @@ export const site = {
 
 /* ---------------------------------------------------------------------------
  * 3. SOCIAL LINKS
- *    TODO: paste your real profile URLs. Empty ones are hidden everywhere.
+ *    Empty ones are hidden everywhere.
  * ------------------------------------------------------------------------ */
 
 export type SocialLink = {
   id: string
   label: string
-  /** Full URL, e.g. 'https://instagram.com/yourhandle'. Empty = hidden. */
+  /** Full URL. Empty = hidden. */
   url: string
-  /** Optional @handle shown next to the label. */
   handle?: string
-  /** Show this one as the primary social link in the nav / hero. */
+  /** Shown as the single social link in the desktop nav. */
   primary?: boolean
 }
 
@@ -100,138 +89,82 @@ export const socialLinks: SocialLink[] = [
 
 /* ---------------------------------------------------------------------------
  * 4. START HERE — the #1 commercial priority of the site
+ *    Wording lives in config/content/*. This is how the CTA behaves.
  * ------------------------------------------------------------------------ */
 
 export const startHere = {
-  eyebrow: 'Start here',
-  title: 'The Moka Playbook',
-  description:
-    'A free collection of the ideas I keep coming back to — how people think, how to stay disciplined, how to communicate, how to sell, and how to actually build things.',
-  /** The bullet list shown next to the CTA. */
-  topics: [
-    'Psychology',
-    'Discipline',
-    'Communication',
-    'Selling',
-    'Building projects',
-    'Understanding people',
-  ],
-  cta: 'Get it free',
-
   /**
-   * The file handed over after signup. Sits in /public.
-   * Empty = the form just confirms the signup with no download.
-   */
-  file: '/the-moka-playbook-fr.pdf',
-  fileCta: 'Download the PDF',
-
-  /**
-   * What happens when the email cannot be stored because no provider is
-   * configured yet (see .env.example):
-   *   true  → hand over the file anyway, so the main CTA never looks broken
-   *   false → show the error and withhold the file
-   */
-  deliverIfStorageFails: true,
-
-  /**
-   * HOW THE CTA WORKS — pick one mode.
-   *
-   *  'email' → shows the inline email field on the site. Submissions go to
-   *            POST /api/subscribe, which stores them wherever you configure
-   *            it (see lib/subscribers.ts + .env.example). Nothing is faked:
-   *            if no provider is configured the API says so clearly.
-   *
-   *  'link'  → shows a button that opens `url` below. Use this the moment you
-   *            have a Beehiiv / ConvertKit / Brevo / Notion / WhatsApp landing
-   *            page. Just paste the URL and switch the mode.
+   *  'email' → inline field, posting to /api/subscribe (see lib/subscribers.ts)
+   *  'link'  → a button opening `url` below (Beehiiv, ConvertKit, Brevo, a
+   *            WhatsApp link, a Notion page…). Paste the URL, flip the mode.
    */
   mode: 'email' as 'email' | 'link',
 
   /** TODO (only needed if mode === 'link'). */
   url: '',
 
-  /** Small print under the field. Says what people actually get. */
-  note: 'Edition 01 · 18-page PDF, in French · No spam, unsubscribe anytime.',
+  /**
+   * The file handed over after signup. Sits in /public.
+   * Empty = the form just confirms the signup with no download.
+   */
+  file: '/the-moka-playbook-fr.pdf',
+
+  /**
+   * What happens when the email cannot be stored (no provider configured,
+   * or the provider rejects the write — see .env.example):
+   *   true  → hand over the file anyway, so the main CTA never looks broken
+   *   false → show the error and withhold the file
+   */
+  deliverIfStorageFails: true,
 } as const
 
 /* ---------------------------------------------------------------------------
- * 5. PROJECTS — "What I'm building"
- *    Also powers the Caractère and InvoiceDZ sections and the footer.
+ * 5. PROJECTS
+ *    Names and descriptions are per-language, keyed by `id` in
+ *    config/content/*. Here: where they point and how they are shown.
  * ------------------------------------------------------------------------ */
 
 export type Project = {
   id: string
-  name: string
-  /** One or two sentences, no hype. */
-  description: string
-  /** TODO: the live site. Empty = the CTA button is hidden. */
+  /** TODO where empty: the live site. Empty = CTA buttons are hidden. */
   url: string
-  /** Optional image in /public, e.g. '/caractere.jpg'. Empty = typographic card. */
+  /** Optional image in /public, e.g. '/caractere.jpg'. Empty = typographic plate. */
   image: string
-  /** Free text: 'Live', 'Building', 'Beta'… */
-  status: string
   year: string
-  /** Button label used in the dedicated section. */
-  cta: string
   /** Show a dedicated full section for this project on the homepage. */
   featured: boolean
-  /** Headline of the dedicated section. */
-  sectionTitle?: string
-  /** Extra CTA in the dedicated section (optional). */
-  primaryCta?: string
 }
 
 export const projects: Project[] = [
   {
     id: 'caractere',
-    name: 'Caractère',
-    description:
-      'Start a clothing brand or create custom apparel without dealing with production complexity.',
     // Production domain of the caractere-store project (also reachable at
     // caracterestore.com and mycaractere.xyz).
     url: 'https://caracteredz.com',
     image: '', // TODO: optional visual in /public
-    status: 'Live',
-    year: '',  // TODO: e.g. '2023'
-    cta: 'Discover Caractère',
+    year: '', // TODO: e.g. '2023'
     featured: true,
-    sectionTitle: 'Build your brand.',
-    primaryCta: 'Start a clothing brand',
   },
   {
     id: 'invoicedz',
-    name: 'InvoiceDZ',
-    // Taken from the product itself. Social handle: @invoicedz.
-    description:
-      'Invoices, quotes and delivery notes built for Algeria — VAT, stamp duty and amounts in words handled for you. Free.',
     url: 'https://invoice-dz.vercel.app',
     image: '',
-    status: 'Live',
     year: '', // TODO
-    cta: 'Discover InvoiceDZ',
     featured: true,
-    sectionTitle: 'Run your business.',
   },
-  // Add more projects here — they appear in "What I'm building" automatically.
+  // Add a project here, then add its copy to every file in config/content/.
 ]
 
 /* ---------------------------------------------------------------------------
  * 6. LEARN — digital products / resources
- *    Add an entry and it shows up in the grid. No entries = "More coming."
  * ------------------------------------------------------------------------ */
 
 export type Resource = {
   id: string
-  title: string
-  description: string
-  /** 'Free', '5,000 DA', 'Coming soon'… */
-  price: string
   /** TODO: where it lives (external URL). Empty falls back to `anchor`. */
   url: string
   /** Internal fallback, e.g. '#start' to send people to the signup block. */
   anchor?: string
-  /** guide | template | playbook | course | tool */
-  type: string
   /** false hides it from the grid (useful for drafts). */
   published: boolean
 }
@@ -239,13 +172,8 @@ export type Resource = {
 export const resources: Resource[] = [
   {
     id: 'moka-playbook',
-    title: 'The Moka Playbook',
-    description:
-      '14 ideas on psychology, discipline, selling and building things. Edition 01, in French.',
-    price: 'Free',
     url: '', // until it has its own page, the card points at the signup below
     anchor: '#start',
-    type: 'playbook',
     published: true,
   },
 ]
@@ -258,21 +186,15 @@ export type Tool = {
   name: string
   /** software | AI | content | business | hardware | books */
   category: string
+  /** Not translated — write it in the language you care about most. */
   description: string
   /** TODO: affiliate or plain link. */
   url: string
 }
 
 export const affiliateTools = {
-  /**
-   * Set to true once `items` below has real entries.
-   * The whole section stays out of the DOM while this is false.
-   */
+  /** The whole section stays out of the DOM while this is false. */
   enabled: false,
-  title: 'Things I use.',
-  subtitle: 'Tools I actually pay for and use every week.',
-  /** Shown once, discreetly, if any link is an affiliate link. */
-  disclosure: 'Some of these are affiliate links.',
   items: [] as Tool[],
 }
 
@@ -282,67 +204,41 @@ export const affiliateTools = {
 
 export const stats = {
   enabled: true,
+  /** `id` matches the labels in config/content/*. */
   items: [
-    { value: '220K+', label: 'Instagram' },
-    { value: '8.8M', label: 'Views · last 30 days' },
+    { id: 'instagram', value: '220K+' },
+    { id: 'views', value: '8.8M' },
   ],
-  /** Optional third line, e.g. profile.role. Set to '' to hide. */
-  note: profile.role,
 }
 
 /* ---------------------------------------------------------------------------
- * 9. WORK WITH ME
+ * 9. CONTACT
  * ------------------------------------------------------------------------ */
 
 export const contact = {
-  title: 'Work with me.',
   /** Main address — everything on this page goes here. */
   email: 'yakoumobi@gmail.com',
-  /**
-   * Optional second address shown in the footer under its own label.
-   * Set `email: ''` to hide it.
-   */
   // NOTE: caracterede.com does not resolve — the Caractère domain is
   // caracteredz.com. Confirm the exact address before relying on this link.
   altEmail: { label: 'Caractère', email: 'contact@caracterede.com' },
   /** Optional: a form URL (Tally, Typeform…). If set, it replaces mailto. */
   formUrl: '', // TODO (optional)
-  cta: 'Get in touch',
-  categories: [
-    {
-      title: 'Brand partnerships',
-      description: 'For brands who want to collaborate on content.',
-      /** Prefills the email subject. */
-      subject: 'Brand partnership',
-    },
-    {
-      title: 'Business / project inquiries',
-      description: 'For serious professional requests.',
-      subject: 'Business inquiry',
-    },
-    {
-      title: 'Speaking / events',
-      description: 'Conferences, events, podcasts.',
-      subject: 'Speaking / event',
-    },
-  ],
 }
 
 /* ---------------------------------------------------------------------------
- * 10. NAVIGATION
+ * 10. NAVIGATION — `id` matches the labels in config/content/*
  * ------------------------------------------------------------------------ */
 
 export const navigation = [
-  { label: 'Start', href: '#start' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Resources', href: '#learn' },
-  { label: 'Contact', href: '#contact' },
+  { id: 'start', href: '#start' },
+  { id: 'projects', href: '#projects' },
+  { id: 'resources', href: '#learn' },
+  { id: 'contact', href: '#contact' },
 ]
 
 /* ---------------------------------------------------------------------------
  * 11. ANALYTICS
  *     Pick ONE provider. See lib/analytics.ts.
- *     'none' | 'plausible' | 'ga' | 'posthog' | 'meta'
  * ------------------------------------------------------------------------ */
 
 export const analytics = {
@@ -354,6 +250,5 @@ export const analytics = {
    * Meta      → your pixel id
    */
   id: '', // TODO (only when you pick a provider)
-  /** PostHog only. */
   posthogHost: 'https://eu.i.posthog.com',
 }

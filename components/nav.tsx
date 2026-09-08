@@ -1,14 +1,18 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { navigation, profile, socialLinks, startHere } from '@/config/site'
+import { navigation, socialLinks } from '@/config/site'
+import type { Content } from '@/config/content'
+import { localeHref } from '@/lib/locale'
+import { LanguageSwitcher } from '@/components/language-switcher'
 import { EVENTS, track } from '@/lib/analytics'
 
-export function Nav() {
+export function Nav({ t }: { t: Content }) {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
   const primarySocial = socialLinks.find((link) => link.primary && link.url)
+  const href = (target: string) => localeHref(t.locale, target)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -35,17 +39,17 @@ export function Nav() {
   }, [open])
 
   const go = (label: string) => {
-    track(EVENTS.nav, { label })
+    track(EVENTS.nav, { label, locale: t.locale })
     setOpen(false)
   }
 
   return (
     <>
       <a
-        href="#start"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:text-paper"
+        href={href('#start')}
+        className="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-[60] focus:rounded focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:text-paper"
       >
-        Skip to content
+        {t.nav.skip}
       </a>
 
       <header
@@ -55,11 +59,11 @@ export function Nav() {
             : 'border-b border-transparent'
         }`}
       >
-        <nav className="shell flex h-16 items-center justify-between" aria-label="Main">
+        <nav className="shell flex h-16 items-center justify-between gap-4" aria-label="Main">
           <a
-            href="#top"
+            href={href('#top')}
             onClick={() => go('logo')}
-            className="text-[0.9375rem] font-semibold tracking-[-0.02em]"
+            className="shrink-0 text-[0.9375rem] font-semibold tracking-[-0.02em]"
           >
             Moka
           </a>
@@ -67,58 +71,63 @@ export function Nav() {
           <div className="hidden items-center gap-8 md:flex">
             {navigation.map((item) => (
               <a
-                key={item.href}
-                href={item.href}
-                onClick={() => go(item.label)}
+                key={item.id}
+                href={href(item.href)}
+                onClick={() => go(item.id)}
                 className="text-[0.875rem] text-muted transition-colors duration-200 hover:text-ink"
               >
-                {item.label}
+                {t.nav.labels[item.id]}
               </a>
             ))}
           </div>
 
-          <div className="hidden items-center gap-5 md:flex">
+          <div className="flex items-center gap-2 md:gap-4">
+            <LanguageSwitcher current={t.locale} />
+
             {primarySocial && (
               <a
                 href={primarySocial.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => track(EVENTS.social, { network: primarySocial.label, place: 'nav' })}
-                className="text-[0.875rem] text-muted transition-colors duration-200 hover:text-ink"
+                onClick={() =>
+                  track(EVENTS.social, { network: primarySocial.label, place: 'nav' })
+                }
+                className="hidden text-[0.875rem] text-muted transition-colors duration-200 hover:text-ink lg:inline"
               >
                 {primarySocial.label}
               </a>
             )}
-            <a
-              href="#start"
-              onClick={() => track(EVENTS.startHere, { place: 'nav' })}
-              className="btn-primary h-10 min-h-0 px-5 text-[0.8125rem]"
-            >
-              {startHere.eyebrow}
-            </a>
-          </div>
 
-          <button
-            type="button"
-            onClick={() => setOpen((value) => !value)}
-            aria-expanded={open}
-            aria-controls="mobile-menu"
-            aria-label={open ? 'Close menu' : 'Open menu'}
-            className="-mr-2 flex h-11 w-11 items-center justify-center md:hidden"
-          >
-            <span className="relative block h-3 w-5">
-              <span
-                className={`absolute left-0 block h-px w-5 bg-ink transition-transform duration-300 ease-out ${
-                  open ? 'top-1.5 rotate-45' : 'top-0'
-                }`}
-              />
-              <span
-                className={`absolute left-0 block h-px w-5 bg-ink transition-transform duration-300 ease-out ${
-                  open ? 'top-1.5 -rotate-45' : 'top-3'
-                }`}
-              />
-            </span>
-          </button>
+            <a
+              href={href('#start')}
+              onClick={() => track(EVENTS.startHere, { place: 'nav' })}
+              className="btn-primary hidden h-10 min-h-0 px-5 text-[0.8125rem] md:inline-flex"
+            >
+              {t.nav.startCta}
+            </a>
+
+            <button
+              type="button"
+              onClick={() => setOpen((value) => !value)}
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              aria-label={open ? t.nav.closeMenu : t.nav.openMenu}
+              className="-me-2 flex h-11 w-11 items-center justify-center md:hidden"
+            >
+              <span className="relative block h-3 w-5">
+                <span
+                  className={`absolute start-0 block h-px w-5 bg-ink transition-transform duration-300 ease-out ${
+                    open ? 'top-1.5 rotate-45' : 'top-0'
+                  }`}
+                />
+                <span
+                  className={`absolute start-0 block h-px w-5 bg-ink transition-transform duration-300 ease-out ${
+                    open ? 'top-1.5 -rotate-45' : 'top-3'
+                  }`}
+                />
+              </span>
+            </button>
+          </div>
         </nav>
       </header>
 
@@ -131,16 +140,14 @@ export function Nav() {
         <div className="shell flex h-[calc(100dvh-4rem)] flex-col justify-between py-10">
           <ul className="space-y-1">
             {navigation.map((item, index) => (
-              <li key={item.href} className="border-b border-line">
+              <li key={item.id} className="border-b border-line">
                 <a
-                  href={item.href}
-                  onClick={() => go(item.label)}
+                  href={href(item.href)}
+                  onClick={() => go(item.id)}
                   className="flex items-baseline gap-4 py-5 text-title font-semibold"
                 >
-                  <span className="text-eyebrow font-medium text-faint">
-                    0{index + 1}
-                  </span>
-                  {item.label}
+                  <span className="text-eyebrow font-medium text-faint">0{index + 1}</span>
+                  {t.nav.labels[item.id]}
                 </a>
               </li>
             ))}
@@ -148,14 +155,14 @@ export function Nav() {
 
           <div className="space-y-6">
             <a
-              href="#start"
+              href={href('#start')}
               onClick={() => {
                 track(EVENTS.startHere, { place: 'mobile_menu' })
                 setOpen(false)
               }}
               className="btn-primary w-full"
             >
-              {startHere.eyebrow}
+              {t.nav.startCta}
             </a>
             <div className="flex flex-wrap gap-x-6 gap-y-2">
               {socialLinks
@@ -166,16 +173,15 @@ export function Nav() {
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => track(EVENTS.social, { network: link.label, place: 'mobile_menu' })}
+                    onClick={() =>
+                      track(EVENTS.social, { network: link.label, place: 'mobile_menu' })
+                    }
                     className="text-sm link-muted"
                   >
                     {link.label}
                   </a>
                 ))}
             </div>
-            <p className="text-sm text-faint">
-              {profile.location} {profile.locationFlag}
-            </p>
           </div>
         </div>
       </div>

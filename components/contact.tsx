@@ -1,4 +1,5 @@
 import { contact } from '@/config/site'
+import type { Content } from '@/config/content'
 import { Arrow } from '@/components/ui/arrow'
 import { Reveal } from '@/components/ui/reveal'
 import { Section } from '@/components/ui/section'
@@ -13,23 +14,21 @@ function contactHref(subject?: string) {
   return `mailto:${contact.email}${query}`
 }
 
-export function Contact() {
+export function Contact({ t }: { t: Content }) {
   const generalHref = contactHref()
 
   return (
-    <Section id="contact" eyebrow="Contact" title={contact.title}>
+    <Section id="contact" eyebrow={t.contact.eyebrow} title={t.contact.title}>
       <div className="mt-12 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:mt-16 sm:grid-cols-3">
-        {contact.categories.map((category, index) => {
+        {t.contact.categories.map((category, index) => {
           const href = contactHref(category.subject)
           const inner = (
             <>
               <h3 className="text-[1.0625rem] font-semibold">{category.title}</h3>
-              <p className="mt-3 text-[0.9375rem] text-muted pretty">
-                {category.description}
-              </p>
+              <p className="mt-3 text-[0.9375rem] text-muted pretty">{category.description}</p>
               {href && (
                 <span className="link-arrow mt-8">
-                  {contact.cta}
+                  {t.contact.cta}
                   <Arrow />
                 </span>
               )}
@@ -43,7 +42,7 @@ export function Contact() {
                   href={href}
                   external={false}
                   event={EVENTS.contact}
-                  props={{ category: category.title }}
+                  props={{ category: index === 0 ? 'brand' : index === 1 ? 'business' : 'speaking' }}
                   className="flex h-full flex-col p-6 transition-colors duration-300 hover:bg-surface sm:p-8"
                 >
                   {inner}
@@ -65,7 +64,7 @@ export function Contact() {
             props={{ category: 'general' }}
             className="btn-primary w-full sm:w-auto"
           >
-            {contact.cta}
+            {t.contact.cta}
             <Arrow />
           </TrackedLink>
         </Reveal>

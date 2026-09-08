@@ -83,6 +83,21 @@
     @apply text-eyebrow font-medium uppercase text-faint;
   }
 
+  /* Arabic has no capitals and the wide tracking hurts it. */
+  [dir='rtl'] .eyebrow {
+    @apply tracking-normal;
+    text-transform: none;
+  }
+
+  /* The display scale is tuned for Latin; Arabic needs air and no negative
+     tracking, or the diacritics collide. */
+  [dir='rtl'] .text-display,
+  [dir='rtl'] .text-headline,
+  [dir='rtl'] .text-title {
+    letter-spacing: 0;
+    line-height: 1.25;
+  }
+
   /* --- Buttons: exactly two variants + one text link ---------------------- */
 
   .btn {
@@ -115,6 +130,16 @@
 
   .link-arrow:hover svg {
     transform: translateX(3px);
+  }
+
+  /* Arrows point the way the language reads. */
+  [dir='rtl'] .btn svg,
+  [dir='rtl'] .link-arrow svg {
+    transform: scaleX(-1);
+  }
+
+  [dir='rtl'] .link-arrow:hover svg {
+    transform: scaleX(-1) translateX(3px);
   }
 
   .link-muted {
