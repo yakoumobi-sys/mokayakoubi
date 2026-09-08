@@ -22,6 +22,8 @@ export type ProjectCopy = {
   sectionTitle?: string
   cta: string
   primaryCta?: string
+  /** Label of the free-guide button, when the project has a `guide` PDF. */
+  guideCta?: string
 }
 
 export type ResourceCopy = {

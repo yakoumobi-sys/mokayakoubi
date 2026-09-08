@@ -22,6 +22,9 @@ export function FeaturedProject({
 }) {
   const flipped = index % 2 === 1
   const hasLink = Boolean(project.url)
+  // A free guide makes a better second button than a second link to the same
+  // page: one CTA to act now, one to read first.
+  const guide = project.guide && copy.guideCta ? project.guide : ''
 
   return (
     <section className="section border-t border-line">
@@ -49,19 +52,32 @@ export function FeaturedProject({
                     <Arrow />
                   </TrackedLink>
                 )}
-                <TrackedLink
-                  href={project.url}
-                  event={EVENTS.project}
-                  props={{ project: project.id, cta: 'secondary' }}
-                  className={
-                    copy.primaryCta
-                      ? 'btn-secondary w-full sm:w-auto'
-                      : 'btn-primary w-full sm:w-auto'
-                  }
-                >
-                  {copy.cta}
-                  {!copy.primaryCta && <Arrow />}
-                </TrackedLink>
+                {guide ? (
+                  <TrackedLink
+                    href={guide}
+                    download
+                    event={EVENTS.guideDownload}
+                    props={{ project: project.id, place: 'section' }}
+                    className="btn-secondary w-full sm:w-auto"
+                  >
+                    {copy.guideCta}
+                    <Arrow />
+                  </TrackedLink>
+                ) : (
+                  <TrackedLink
+                    href={project.url}
+                    event={EVENTS.project}
+                    props={{ project: project.id, cta: 'secondary' }}
+                    className={
+                      copy.primaryCta
+                        ? 'btn-secondary w-full sm:w-auto'
+                        : 'btn-primary w-full sm:w-auto'
+                    }
+                  >
+                    {copy.cta}
+                    {!copy.primaryCta && <Arrow />}
+                  </TrackedLink>
+                )}
               </div>
             )}
           </Reveal>

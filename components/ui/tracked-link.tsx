@@ -14,6 +14,7 @@ export function TrackedLink({
   children,
   className = '',
   external,
+  download,
 }: {
   href: string
   event: EventName
@@ -21,14 +22,17 @@ export function TrackedLink({
   children: ReactNode
   className?: string
   external?: boolean
+  /** Hands the file over instead of navigating to it. */
+  download?: boolean
 }) {
-  const isExternal = external ?? /^https?:\/\//.test(href)
+  const isExternal = !download && (external ?? /^https?:\/\//.test(href))
 
   return (
     <a
       href={href}
       className={className}
       onClick={() => track(event, props)}
+      {...(download ? { download: true } : {})}
       {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
     >
       {children}

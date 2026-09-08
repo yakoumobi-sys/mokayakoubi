@@ -77,6 +77,7 @@ export const fr: Content = {
       sectionTitle: 'Crée ta marque.',
       cta: 'Découvrir Caractère',
       primaryCta: 'Lancer ma marque de vêtements',
+      guideCta: 'Obtenir le guide gratuit',
     },
     invoicedz: {
       name: 'InvoiceDZ',
@@ -103,6 +104,13 @@ export const fr: Content = {
         '14 idées sur la psychologie, la discipline, la vente et la construction de projets. Édition 01.',
       price: 'Gratuit',
       type: 'playbook',
+    },
+    'build-your-brand': {
+      title: 'Build Your Brand',
+      description:
+        'Comment lancer ta marque de vêtements sans gérer la production. 10 pages.',
+      price: 'Gratuit',
+      type: 'guide',
     },
   },
 

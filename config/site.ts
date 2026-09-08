@@ -133,17 +133,25 @@ export type Project = {
   year: string
   /** Show a dedicated full section for this project on the homepage. */
   featured: boolean
+  /**
+   * Optional free PDF in /public. When set, the project's second button
+   * hands over the guide instead of repeating the link to the site —
+   * one CTA to act, one to learn first.
+   */
+  guide?: string
 }
 
 export const projects: Project[] = [
   {
     id: 'caractere',
-    // Production domain of the caractere-store project (also reachable at
-    // caracterestore.com and mycaractere.xyz).
-    url: 'https://caracteredz.com',
+    // The domain the brand actually communicates (it is the one printed in
+    // the Build Your Brand guide). caracteredz.com and caracterestore.com
+    // point at the same store.
+    url: 'https://mycaractere.xyz',
     image: '', // TODO: optional visual in /public
     year: '', // TODO: e.g. '2023'
     featured: true,
+    guide: '/build-your-brand-caractere-fr.pdf',
   },
   {
     id: 'invoicedz',
@@ -161,8 +169,10 @@ export const projects: Project[] = [
 
 export type Resource = {
   id: string
-  /** TODO: where it lives (external URL). Empty falls back to `anchor`. */
+  /** TODO: where it lives (external URL). Empty falls back to `file`, then `anchor`. */
   url: string
+  /** A PDF in /public, handed over directly from the card. */
+  file?: string
   /** Internal fallback, e.g. '#start' to send people to the signup block. */
   anchor?: string
   /** false hides it from the grid (useful for drafts). */
@@ -174,6 +184,12 @@ export const resources: Resource[] = [
     id: 'moka-playbook',
     url: '', // until it has its own page, the card points at the signup below
     anchor: '#start',
+    published: true,
+  },
+  {
+    id: 'build-your-brand',
+    url: '',
+    file: '/build-your-brand-caractere-fr.pdf',
     published: true,
   },
 ]

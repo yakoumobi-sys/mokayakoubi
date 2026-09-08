@@ -77,6 +77,7 @@ export const ar: Content = {
       sectionTitle: 'ابنِ علامتك.',
       cta: 'اكتشف Caractère',
       primaryCta: 'أطلق علامتك للملابس',
+      guideCta: 'احصل على الدليل مجانًا',
     },
     invoicedz: {
       name: 'InvoiceDZ',
@@ -103,6 +104,13 @@ export const ar: Content = {
         '14 فكرة عن علم النفس والانضباط والبيع وبناء المشاريع. الإصدار 01، بالفرنسية.',
       price: 'مجانًا',
       type: 'playbook',
+    },
+    'build-your-brand': {
+      title: 'Build Your Brand',
+      description:
+        'كيف تطلق علامتك للملابس دون التعامل مع الإنتاج. 10 صفحات، بالفرنسية.',
+      price: 'مجانًا',
+      type: 'دليل',
     },
   },
 

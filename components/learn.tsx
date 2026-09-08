@@ -20,7 +20,8 @@ export function Learn({ t }: { t: Content }) {
     <Section id="learn" eyebrow={t.learn.eyebrow} title={t.learn.title} intro={t.learn.intro}>
       <div className="mt-12 grid gap-4 sm:mt-16 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((resource, index) => {
-          const target = resource.url || resource.anchor || ''
+          const target = resource.url || resource.file || resource.anchor || ''
+          const isFile = !resource.url && Boolean(resource.file)
           const href = target.startsWith('#') ? localeHref(t.locale, target) : target
           const body = (
             <>
@@ -46,8 +47,9 @@ export function Learn({ t }: { t: Content }) {
               {href ? (
                 <TrackedLink
                   href={href}
-                  event={EVENTS.resource}
-                  props={{ resource: resource.id }}
+                  download={isFile}
+                  event={isFile ? EVENTS.guideDownload : EVENTS.resource}
+                  props={{ resource: resource.id, place: 'learn' }}
                   className="card h-full"
                 >
                   {body}

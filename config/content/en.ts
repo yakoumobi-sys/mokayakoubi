@@ -73,6 +73,7 @@ export const en: Content = {
       sectionTitle: 'Build your brand.',
       cta: 'Discover Caractère',
       primaryCta: 'Start a clothing brand',
+      guideCta: 'Get the free guide',
     },
     invoicedz: {
       name: 'InvoiceDZ',
@@ -99,6 +100,13 @@ export const en: Content = {
         '14 ideas on psychology, discipline, selling and building things. Edition 01, in French.',
       price: 'Free',
       type: 'playbook',
+    },
+    'build-your-brand': {
+      title: 'Build Your Brand',
+      description:
+        'How to launch a clothing brand without handling production. 10 pages, in French.',
+      price: 'Free',
+      type: 'guide',
     },
   },
 
