@@ -113,15 +113,21 @@ export function PlaybookForm({ t }: { t: Content }) {
           placeholder={t.startHere.emailPlaceholder}
           value={email}
           onChange={(event) => setEmail(event.target.value)}
-          className="h-12 w-full flex-1 rounded-full border border-white/20 bg-transparent px-5
-                     text-start text-[0.9375rem] text-paper placeholder:text-white/55
-                     transition-colors duration-200 focus:border-white/50 focus:outline-none
-                     focus-visible:outline-none sm:max-w-sm"
+          /* `flex-1` only from sm: in the mobile column layout it sets a
+             flex-basis on the *height* and collapses the field to its content.
+             Filled rather than outlined, because on a black panel next to a
+             solid white button an outlined pill reads as decoration.
+             16px text so iOS does not zoom the page on focus. */
+          className="h-14 w-full rounded-full border border-white/30 bg-white/[0.08] px-5
+                     text-start text-base text-paper placeholder:text-white/65
+                     transition-colors duration-200 focus:border-white/70 focus:bg-white/[0.14]
+                     focus:outline-none focus-visible:outline-none
+                     sm:h-12 sm:max-w-sm sm:flex-1 sm:text-[0.9375rem]"
         />
         <button
           type="submit"
           disabled={state === 'loading'}
-          className="btn-invert w-full disabled:opacity-60 sm:w-auto"
+          className="btn-invert h-14 w-full disabled:opacity-60 sm:h-12 sm:w-auto"
         >
           {state === 'loading' ? t.startHere.sending : t.startHere.cta}
           {state !== 'loading' && <Arrow />}
