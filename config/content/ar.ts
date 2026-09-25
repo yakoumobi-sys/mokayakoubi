@@ -38,6 +38,7 @@ export const ar: Content = {
 
   hero: {
     secondaryCta: 'تصفّح مشاريعي',
+    catalogueCta: 'كتالوج Caractère',
   },
 
   startHere: {

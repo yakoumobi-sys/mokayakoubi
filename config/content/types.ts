@@ -68,6 +68,8 @@ export type Content = {
 
   hero: {
     secondaryCta: string
+    /** Label of the Caractère catalogue button, when a catalogue PDF is set. */
+    catalogueCta?: string
   }
 
   startHere: {

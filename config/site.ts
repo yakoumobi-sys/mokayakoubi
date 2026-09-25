@@ -139,6 +139,11 @@ export type Project = {
    * one CTA to act, one to learn first.
    */
   guide?: string
+  /**
+   * Optional catalogue PDF in /public. When set, the hero shows a button
+   * that opens it, right at the top of the site.
+   */
+  catalogue?: string
 }
 
 export const projects: Project[] = [
@@ -152,6 +157,7 @@ export const projects: Project[] = [
     year: '', // TODO: e.g. '2023'
     featured: true,
     guide: '/build-your-brand-caractere-fr.pdf',
+    catalogue: '/catalogue-caractere-fr.pdf',
   },
   {
     id: 'invoicedz',

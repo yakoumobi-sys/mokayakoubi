@@ -34,6 +34,7 @@ export const en: Content = {
 
   hero: {
     secondaryCta: 'Explore my projects',
+    catalogueCta: 'Caractère catalogue',
   },
 
   startHere: {

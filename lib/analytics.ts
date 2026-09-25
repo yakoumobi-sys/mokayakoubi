@@ -17,6 +17,7 @@ export const EVENTS = {
   playbookSuccess: 'playbook_subscribed',
   playbookDownload: 'playbook_downloaded',
   guideDownload: 'guide_downloaded',
+  catalogue: 'cta_catalogue',
   project: 'cta_project',
   resource: 'cta_resource',
   contact: 'cta_contact',

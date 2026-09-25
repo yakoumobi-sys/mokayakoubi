@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { profile } from '@/config/site'
+import { profile, projects } from '@/config/site'
 import type { Content } from '@/config/content'
 import { localeHref } from '@/lib/locale'
 import { Arrow } from '@/components/ui/arrow'
@@ -13,6 +13,9 @@ import { EVENTS } from '@/lib/analytics'
 export function Hero({ t }: { t: Content }) {
   const hasPhoto = Boolean(profile.photo)
   const href = (target: string) => localeHref(t.locale, target)
+  // The catalogue is the first thing a business client comes for, so it gets
+  // a button in the first view rather than waiting in the Caractère section.
+  const catalogue = projects.find((project) => project.catalogue)
 
   return (
     <section id="top" className="relative pt-28 sm:pt-36 lg:pt-44">
@@ -56,6 +59,19 @@ export function Hero({ t }: { t: Content }) {
                 {t.nav.startCta}
                 <Arrow />
               </TrackedLink>
+
+              {catalogue?.catalogue && t.hero.catalogueCta && (
+                <TrackedLink
+                  href={catalogue.catalogue}
+                  external
+                  event={EVENTS.catalogue}
+                  props={{ project: catalogue.id, place: 'hero' }}
+                  className="btn-secondary w-full sm:w-auto"
+                >
+                  {t.hero.catalogueCta}
+                  <Arrow />
+                </TrackedLink>
+              )}
 
               <TrackedLink
                 href={href('#projects')}
