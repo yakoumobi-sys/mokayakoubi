@@ -8,17 +8,15 @@ export function Footer({ t }: { t: Content }) {
   const year = new Date().getFullYear()
   const socials = socialLinks.filter((link) => link.url)
   const linkedProjects = projects.filter(
-    (project) => project.url && t.projects[project.id]
+    (project) => project.url && t.projects[project.id],
   )
 
   return (
-    <footer className="border-t border-line py-14 sm:py-16">
+    <footer className="site-footer border-t border-line py-14 sm:py-16">
       <div className="shell">
         <div className="flex flex-col gap-12 sm:flex-row sm:justify-between sm:gap-16">
           <div>
-            <p className="text-[0.9375rem] font-semibold tracking-[-0.02em]">
-              {profile.name}
-            </p>
+            <p className="footer-wordmark">{profile.name}</p>
             <p className="mt-2 text-[0.9375rem] text-muted">
               {t.profile.location} {profile.locationFlag}
             </p>

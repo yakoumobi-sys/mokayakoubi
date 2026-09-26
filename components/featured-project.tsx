@@ -2,15 +2,9 @@ import Image from 'next/image'
 import type { Project } from '@/config/site'
 import type { ProjectCopy } from '@/config/content'
 import { Arrow } from '@/components/ui/arrow'
-import { Reveal } from '@/components/ui/reveal'
 import { TrackedLink } from '@/components/ui/tracked-link'
 import { EVENTS } from '@/lib/analytics'
 
-/**
- * One layout, used for every featured company (Caractère, InvoiceDZ, and
- * whatever comes next). Buttons only appear once the project has a real URL
- * in config/site.ts — no dead links.
- */
 export function FeaturedProject({
   project,
   copy,
@@ -20,104 +14,65 @@ export function FeaturedProject({
   copy: ProjectCopy
   index: number
 }) {
-  const flipped = index % 2 === 1
-  const hasLink = Boolean(project.url)
-  // A free guide makes a better second button than a second link to the same
-  // page: one CTA to act now, one to read first.
-  const guide = project.guide && copy.guideCta ? project.guide : ''
-
   return (
-    <section className="section border-t border-line">
-      <div className="shell">
-        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-20">
-          <Reveal className={flipped ? 'lg:order-2' : ''}>
-            <p className="eyebrow mb-5">{copy.name}</p>
-            <h2 className="text-headline font-semibold balance">
-              {copy.sectionTitle || copy.name}
-            </h2>
-            <p className="mt-6 max-w-prose text-lede text-muted pretty">
-              {copy.description}
+    <article className="project-card">
+      <div
+        className={`project-visual ${index % 2 ? 'project-visual-light' : ''}`}
+      >
+        {project.image ? (
+          <Image
+            src={project.image}
+            alt={copy.name}
+            fill
+            sizes="(max-width: 760px) 100vw, 50vw"
+            className="object-cover"
+          />
+        ) : (
+          <>
+            <div className="project-visual-top">
+              <span>0{index + 1}</span>
+              <span>{copy.status}</span>
+            </div>
+            <p className="project-wordmark" dir="ltr">
+              {copy.name}
+              <span className="accent-dot">.</span>
             </p>
-
-            {hasLink && (
-              <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-                {copy.primaryCta && (
-                  <TrackedLink
-                    href={project.url}
-                    event={EVENTS.project}
-                    props={{ project: project.id, cta: 'primary' }}
-                    className="btn-primary w-full sm:w-auto"
-                  >
-                    {copy.primaryCta}
-                    <Arrow />
-                  </TrackedLink>
-                )}
-                {guide ? (
-                  <TrackedLink
-                    href={guide}
-                    download
-                    event={EVENTS.guideDownload}
-                    props={{ project: project.id, place: 'section' }}
-                    className="btn-secondary w-full sm:w-auto"
-                  >
-                    {copy.guideCta}
-                    <Arrow />
-                  </TrackedLink>
-                ) : (
-                  <TrackedLink
-                    href={project.url}
-                    event={EVENTS.project}
-                    props={{ project: project.id, cta: 'secondary' }}
-                    className={
-                      copy.primaryCta
-                        ? 'btn-secondary w-full sm:w-auto'
-                        : 'btn-primary w-full sm:w-auto'
-                    }
-                  >
-                    {copy.cta}
-                    {!copy.primaryCta && <Arrow />}
-                  </TrackedLink>
-                )}
-              </div>
-            )}
-          </Reveal>
-
-          <Reveal delay={60} className={flipped ? 'lg:order-1' : ''}>
-            <Visual project={project} copy={copy} />
-          </Reveal>
+            <div className="project-visual-bottom">
+              <span>{copy.sectionTitle}</span>
+              <span aria-hidden="true">↗</span>
+            </div>
+          </>
+        )}
+      </div>
+      <div className="project-details">
+        <h3>{copy.sectionTitle || copy.name}</h3>
+        <p>{copy.description}</p>
+        <div className="project-links">
+          {project.url && (
+            <TrackedLink
+              href={project.url}
+              event={EVENTS.project}
+              props={{ project: project.id, cta: 'primary' }}
+              className="link-arrow"
+            >
+              {copy.primaryCta || copy.cta}
+              <Arrow />
+            </TrackedLink>
+          )}
+          {project.guide && copy.guideCta && (
+            <TrackedLink
+              href={project.guide}
+              download
+              event={EVENTS.guideDownload}
+              props={{ project: project.id, place: 'section' }}
+              className="project-guide"
+            >
+              {copy.guideCta}
+              <span aria-hidden="true"> ↓</span>
+            </TrackedLink>
+          )}
         </div>
       </div>
-    </section>
-  )
-}
-
-/** A photo when there is one, a typographic plate when there isn't. */
-function Visual({ project, copy }: { project: Project; copy: ProjectCopy }) {
-  if (project.image) {
-    return (
-      <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg bg-surface sm:aspect-[4/3]">
-        <Image
-          src={project.image}
-          alt={copy.name}
-          fill
-          loading="lazy"
-          sizes="(max-width: 1024px) 100vw, 45vw"
-          className="object-cover"
-        />
-      </div>
-    )
-  }
-
-  return (
-    <div className="flex aspect-[16/10] w-full flex-col justify-between rounded-lg border border-line bg-surface p-7 sm:aspect-[4/3] sm:p-10">
-      <span className="eyebrow">{copy.status}</span>
-      {/* Latin name inside an RTL page: the bidi algorithm keeps the letters
-          in order, and inheriting the page direction keeps it aligned with the
-          status and the year above and below it. */}
-      <span className="font-serif text-[clamp(2.5rem,8vw,4.5rem)] leading-[0.95] tracking-[-0.02em]">
-        {copy.name}
-      </span>
-      <span className="text-[0.8125rem] text-faint">{project.year || ' '}</span>
-    </div>
+    </article>
   )
 }

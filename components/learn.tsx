@@ -1,72 +1,73 @@
 import { resources } from '@/config/site'
 import type { Content } from '@/config/content'
 import { localeHref } from '@/lib/locale'
-import { Arrow } from '@/components/ui/arrow'
-import { Reveal } from '@/components/ui/reveal'
-import { Section } from '@/components/ui/section'
 import { TrackedLink } from '@/components/ui/tracked-link'
 import { EVENTS } from '@/lib/analytics'
 
-/**
- * The shelf. Add an entry to `resources` in config/site.ts plus its copy in
- * every file under config/content/ and it lands here.
- */
 export function Learn({ t }: { t: Content }) {
-  const items = resources
-    .filter((resource) => resource.published && t.resources[resource.id])
-    .map((resource) => ({ ...resource, copy: t.resources[resource.id] }))
-
+  const items = resources.filter(
+    (resource) => resource.published && t.resources[resource.id],
+  )
   return (
-    <Section id="learn" eyebrow={t.learn.eyebrow} title={t.learn.title} intro={t.learn.intro}>
-      <div className="mt-12 grid gap-4 sm:mt-16 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map((resource, index) => {
-          const target = resource.url || resource.file || resource.anchor || ''
-          const isFile = !resource.url && Boolean(resource.file)
-          const href = target.startsWith('#') ? localeHref(t.locale, target) : target
-          const body = (
-            <>
-              <div className="flex items-center justify-between gap-4">
-                <span className="eyebrow">{resource.copy.type}</span>
-                <span className="text-[0.8125rem] text-muted">{resource.copy.price}</span>
-              </div>
-              <h3 className="mt-8 text-title font-semibold">{resource.copy.title}</h3>
-              <p className="mt-3 text-[0.9375rem] text-muted pretty">
-                {resource.copy.description}
-              </p>
-              {href && (
-                <span className="link-arrow mt-8">
-                  {t.learn.get}
-                  <Arrow />
-                </span>
-              )}
-            </>
-          )
-
-          return (
-            <Reveal key={resource.id} delay={index * 60}>
-              {href ? (
-                <TrackedLink
-                  href={href}
-                  download={isFile}
-                  event={isFile ? EVENTS.guideDownload : EVENTS.resource}
-                  props={{ resource: resource.id, place: 'learn' }}
-                  className="card h-full"
-                >
-                  {body}
-                </TrackedLink>
-              ) : (
-                <div className="card h-full">{body}</div>
-              )}
-            </Reveal>
-          )
-        })}
-
-        <Reveal delay={items.length * 60}>
-          <div className="flex h-full min-h-[9rem] items-end rounded-lg border border-dashed border-line p-6 sm:min-h-[13rem] sm:p-8">
-            <p className="text-[0.9375rem] text-faint">{t.learn.more}</p>
+    <section id="learn" className="section resources-section">
+      <div className="shell">
+        <div className="section-heading">
+          <p className="eyebrow">03 / {t.learn.eyebrow}</p>
+          <div>
+            <h2 className="text-headline font-semibold">{t.learn.title}</h2>
+            <p className="section-intro">{t.learn.intro}</p>
           </div>
-        </Reveal>
+        </div>
+        <div className="resources-list">
+          {items.map((resource, index) => {
+            const copy = t.resources[resource.id]
+            const target =
+              resource.url || resource.file || resource.anchor || ''
+            const href = target.startsWith('#')
+              ? localeHref(t.locale, target)
+              : target
+            const isFile = !resource.url && Boolean(resource.file)
+            const body = (
+              <>
+                <span
+                  className={`resource-number resource-number-${index}`}
+                  aria-hidden="true"
+                >
+                  0{index + 1}
+                </span>
+                <div className="resource-copy">
+                  <div className="resource-meta">
+                    <span>{copy.type}</span>
+                    <span>{copy.price}</span>
+                  </div>
+                  <h3>{copy.title}</h3>
+                  <p>{copy.description}</p>
+                </div>
+                <span className="resource-action">
+                  {t.learn.get}
+                  <span aria-hidden="true">{isFile ? '↓' : '↗'}</span>
+                </span>
+              </>
+            )
+            return href ? (
+              <TrackedLink
+                key={resource.id}
+                href={href}
+                download={isFile}
+                event={isFile ? EVENTS.guideDownload : EVENTS.resource}
+                props={{ resource: resource.id }}
+                className="resource-row"
+              >
+                {body}
+              </TrackedLink>
+            ) : (
+              <div key={resource.id} className="resource-row">
+                {body}
+              </div>
+            )
+          })}
+        </div>
       </div>
-    </Section>
+    </section>
   )
 }

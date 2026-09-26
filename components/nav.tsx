@@ -46,26 +46,29 @@ export function Nav({ t }: { t: Content }) {
   return (
     <>
       <a
-        href={href('#start')}
+        href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-[60] focus:rounded focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:text-paper"
       >
         {t.nav.skip}
       </a>
 
       <header
-        className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
+        className={`site-header fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
           scrolled || open
             ? 'border-b border-line bg-paper/95 backdrop-blur-xl supports-[backdrop-filter]:bg-paper/80'
             : 'border-b border-transparent'
         }`}
       >
-        <nav className="shell flex h-16 items-center justify-between gap-4" aria-label="Main">
+        <nav
+          className="shell flex h-16 items-center justify-between gap-4"
+          aria-label="Main"
+        >
           <a
             href={href('#top')}
             onClick={() => go('logo')}
-            className="shrink-0 text-[0.9375rem] font-semibold tracking-[-0.02em]"
+            className="nav-wordmark"
           >
-            Moka
+            moka<span className="accent-dot">.</span>
           </a>
 
           <div className="hidden items-center gap-8 md:flex">
@@ -90,7 +93,10 @@ export function Nav({ t }: { t: Content }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() =>
-                  track(EVENTS.social, { network: primarySocial.label, place: 'nav' })
+                  track(EVENTS.social, {
+                    network: primarySocial.label,
+                    place: 'nav',
+                  })
                 }
                 className="hidden text-[0.875rem] text-muted transition-colors duration-200 hover:text-ink lg:inline"
               >
@@ -146,7 +152,9 @@ export function Nav({ t }: { t: Content }) {
                   onClick={() => go(item.id)}
                   className="flex items-baseline gap-4 py-5 text-title font-semibold"
                 >
-                  <span className="text-eyebrow font-medium text-faint">0{index + 1}</span>
+                  <span className="text-eyebrow font-medium text-faint">
+                    0{index + 1}
+                  </span>
                   {t.nav.labels[item.id]}
                 </a>
               </li>
@@ -174,7 +182,10 @@ export function Nav({ t }: { t: Content }) {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() =>
-                      track(EVENTS.social, { network: link.label, place: 'mobile_menu' })
+                      track(EVENTS.social, {
+                        network: link.label,
+                        place: 'mobile_menu',
+                      })
                     }
                     className="text-sm link-muted"
                   >

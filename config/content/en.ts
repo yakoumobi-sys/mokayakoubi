@@ -7,14 +7,14 @@ export const en: Content = {
   switcherLabel: 'Language',
 
   meta: {
-    title: 'Moka Yakoubi — Psychology. Discipline. Building things.',
+    title: 'Moka Yakoubi — Entrepreneur & creator.',
     description:
       'Moka Yakoubi builds companies from Algeria — Caractère and InvoiceDZ — and shares what he learns about psychology, discipline and building things.',
   },
 
   profile: {
-    tagline: ['Psychology.', 'Discipline.', 'Building things.'],
-    description: 'I build companies and share what I learn.',
+    tagline: ['Build.', 'Learn.', 'Pass it on.'],
+    description: 'Entrepreneur. Founder of Caractère. I build businesses from Algeria and share the lessons I learn along the way.',
     location: 'Algeria',
     role: 'Founder of Caractère & InvoiceDZ',
   },
@@ -127,7 +127,7 @@ export const en: Content = {
       instagram: 'Instagram',
       views: 'Views · last 30 days',
     },
-    note: 'Founder of Caractère & InvoiceDZ',
+    note: 'Entrepreneurship. Creativity. Progress.',
   },
 
   contact: {

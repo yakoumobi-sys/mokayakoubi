@@ -11,14 +11,14 @@ export const ar: Content = {
   switcherLabel: 'اللغة',
 
   meta: {
-    title: 'مُكة يعقوبي — علم النفس. الانضباط. البناء.',
+    title: 'مُكة يعقوبي — رائد أعمال وصانع محتوى.',
     description:
       'مُكة يعقوبي يبني شركات من الجزائر — Caractère و InvoiceDZ — ويشارك ما يتعلمه عن علم النفس والانضباط وبناء المشاريع.',
   },
 
   profile: {
-    tagline: ['علم النفس.', 'الانضباط.', 'البناء.'],
-    description: 'أبني شركات وأشارك ما أتعلمه.',
+    tagline: ['أبني.', 'أتعلّم.', 'أشارك.'],
+    description: 'رائد أعمال ومؤسس Caractère. أبني شركات من الجزائر وأشارك الدروس التي أتعلمها من الميدان.',
     location: 'الجزائر',
     role: 'مؤسس Caractère و InvoiceDZ',
   },
@@ -131,7 +131,7 @@ export const ar: Content = {
       instagram: 'إنستغرام',
       views: 'مشاهدة · آخر 30 يومًا',
     },
-    note: 'مؤسس Caractère و InvoiceDZ',
+    note: 'ريادة أعمال. إبداع. تقدّم.',
   },
 
   contact: {

@@ -1,95 +1,93 @@
 import Image from 'next/image'
-import { profile } from '@/config/site'
+import { profile, socialLinks } from '@/config/site'
 import type { Content } from '@/config/content'
 import { localeHref } from '@/lib/locale'
 import { Arrow } from '@/components/ui/arrow'
 import { TrackedLink } from '@/components/ui/tracked-link'
 import { EVENTS } from '@/lib/analytics'
 
-/**
- * First view. Three seconds to say who this is and where to click.
- * Rendered on the server — the LCP text ships in the HTML.
- */
 export function Hero({ t }: { t: Content }) {
-  const hasPhoto = Boolean(profile.photo)
-  const href = (target: string) => localeHref(t.locale, target)
-
   return (
-    <section id="top" className="relative pt-28 sm:pt-36 lg:pt-44">
+    <section id="top" className="hero-section">
       <div className="shell">
-        <div
-          className={
-            hasPhoto
-              ? 'grid gap-8 sm:gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:gap-16'
-              : ''
-          }
-        >
-          <div>
-            <p className="enter enter-1 eyebrow mb-7 sm:mb-10">
-              {profile.locationFlag} {t.profile.location}
+        <div className="hero-layout">
+          <div className="hero-copy">
+            <p className="eyebrow enter">
+              {profile.locationFlag} {t.profile.location}{' '}
+              <span className="eyebrow-divider">/</span> {profile.name}
             </p>
-
-            <h1 className="enter enter-2">
-              <span className="block text-[0.9375rem] font-medium tracking-[-0.01em] text-muted">
-                {profile.name}
-              </span>
-              <span className="mt-4 block text-display font-semibold">
-                {t.profile.tagline.map((line) => (
-                  <span key={line} className="block">
-                    {line}
-                  </span>
-                ))}
-              </span>
+            <h1 className="hero-title enter enter-1">
+              {t.profile.tagline.map((line, index) => (
+                <span key={line} className={index === 1 ? 'hero-outline' : ''}>
+                  {line}
+                </span>
+              ))}
             </h1>
-
-            <p className="enter enter-3 mt-7 max-w-prose text-lede text-muted pretty sm:mt-8">
+            <p className="hero-description enter enter-2">
               {t.profile.description}
             </p>
-
-            <div className="enter enter-4 mt-9 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:items-center sm:gap-4">
+            <div className="hero-actions enter enter-3">
               <TrackedLink
-                href={href('#start')}
-                event={EVENTS.startHere}
-                props={{ place: 'hero' }}
-                className="btn-primary w-full sm:w-auto"
-              >
-                {t.nav.startCta}
-                <Arrow />
-              </TrackedLink>
-
-              <TrackedLink
-                href={href('#projects')}
+                href={localeHref(t.locale, '#projects')}
                 event={EVENTS.nav}
                 props={{ label: 'hero_projects' }}
-                className="btn-secondary w-full sm:w-auto"
+                className="btn-primary"
               >
                 {t.hero.secondaryCta}
+                <Arrow />
+              </TrackedLink>
+              <TrackedLink
+                href={localeHref(t.locale, '#start')}
+                event={EVENTS.startHere}
+                props={{ place: 'hero' }}
+                className="hero-text-link"
+              >
+                {t.nav.startCta}
+                <span aria-hidden="true">↗</span>
               </TrackedLink>
             </div>
+            <p className="hero-role">{t.profile.role}</p>
           </div>
-
-          {hasPhoto && (
-            /* Small square on mobile so the hero stays short, full column on
-               desktop. Sits above the name on phones — the face is what people
-               arriving from a Reel recognise first. */
-            <div className="enter order-first lg:order-none">
-              <div className="relative aspect-square w-28 overflow-hidden rounded-lg bg-surface sm:w-36 lg:w-full">
-                <Image
-                  src={profile.photo}
-                  alt={profile.photoAlt}
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 160px, 45vw"
-                  className="object-cover"
-                />
+          {profile.photo && (
+            <div className="hero-portrait enter enter-2">
+              <Image
+                src={profile.photo}
+                alt={profile.photoAlt}
+                fill
+                priority
+                sizes="(max-width: 760px) 100vw, 48vw"
+                className="object-cover"
+              />
+              <div className="portrait-caption">
+                <span dir="ltr">
+                  MOKA
+                  <br />
+                  YAKOUBI<span className="accent-dot">.</span>
+                </span>
+                <span className="portrait-location">
+                  {t.profile.location} {profile.locationFlag}
+                </span>
               </div>
             </div>
           )}
         </div>
-
-        {/* Quiet editorial footer to the hero. */}
-        <div className="enter enter-4 mt-16 border-t border-line pt-5 sm:mt-24">
-          <p className="text-[0.8125rem] text-faint">{t.profile.role}</p>
+        <div className="hero-bottom">
+          <span>{t.stats.note}</span>
+          <div>
+            {socialLinks
+              .filter((link) => link.url)
+              .map((link) => (
+                <TrackedLink
+                  key={link.id}
+                  href={link.url}
+                  event={EVENTS.social}
+                  props={{ network: link.label, place: 'hero' }}
+                >
+                  {link.label}
+                  <span aria-hidden="true"> ↗</span>
+                </TrackedLink>
+              ))}
+          </div>
         </div>
       </div>
     </section>

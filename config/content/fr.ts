@@ -11,14 +11,14 @@ export const fr: Content = {
   switcherLabel: 'Langue',
 
   meta: {
-    title: 'Moka Yakoubi — Psychologie. Discipline. Construire.',
+    title: 'Moka Yakoubi — Entrepreneur & créateur.',
     description:
       'Moka Yakoubi construit des entreprises depuis l’Algérie — Caractère et InvoiceDZ — et partage ce qu’il apprend sur la psychologie, la discipline et la construction de projets.',
   },
 
   profile: {
-    tagline: ['Psychologie.', 'Discipline.', 'Construire.'],
-    description: 'Je construis des entreprises et je partage ce que j’apprends.',
+    tagline: ['Construire.', 'Apprendre.', 'Transmettre.'],
+    description: 'Entrepreneur, fondateur de Caractère. Je construis des entreprises depuis l’Algérie et je partage les leçons du terrain.',
     location: 'Algérie',
     role: 'Fondateur de Caractère & InvoiceDZ',
   },
@@ -131,7 +131,7 @@ export const fr: Content = {
       instagram: 'Instagram',
       views: 'Vues · 30 derniers jours',
     },
-    note: 'Fondateur de Caractère & InvoiceDZ',
+    note: 'Entreprendre. Créer. Faire avancer les choses.',
   },
 
   contact: {

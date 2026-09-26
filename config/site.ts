@@ -20,7 +20,7 @@
 export const profile = {
   name: 'Moka Yakoubi',
   /** Used for SEO only (real name variant people search for). */
-  alternateName: 'Mohammed Yakoubi',
+  alternateName: 'Mohamed Yakoubi',
   locationFlag: '🇩🇿',
   countryCode: 'DZ',
   /**
@@ -236,7 +236,7 @@ export const contact = {
   email: 'yakoumobi@gmail.com',
   // NOTE: caracterede.com does not resolve — the Caractère domain is
   // caracteredz.com. Confirm the exact address before relying on this link.
-  altEmail: { label: 'Caractère', email: 'contact@caracterede.com' },
+  altEmail: { label: 'Caractère', email: '' },
   /** Optional: a form URL (Tally, Typeform…). If set, it replaces mailto. */
   formUrl: '', // TODO (optional)
 }

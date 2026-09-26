@@ -1,14 +1,18 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { getContent, isLocale, LOCALES, DEFAULT_LOCALE, type Locale } from '@/config/content'
-import { profile, projects, site } from '@/config/site'
+import {
+  getContent,
+  isLocale,
+  LOCALES,
+  DEFAULT_LOCALE,
+  type Locale,
+} from '@/config/content'
+import { profile, site } from '@/config/site'
 import { localePath } from '@/lib/locale'
 import { Hero } from '@/components/hero'
 import { StartHere } from '@/components/start-here'
-import { FeaturedProject } from '@/components/featured-project'
 import { Learn } from '@/components/learn'
 import { Building } from '@/components/building'
-import { Proof } from '@/components/proof'
 import { Tools } from '@/components/tools'
 import { Contact } from '@/components/contact'
 import { Footer } from '@/components/footer'
@@ -61,7 +65,14 @@ export function generateMetadata({ params }: { params: Params }): Metadata {
       locale: locale === 'en' ? 'en_US' : locale === 'fr' ? 'fr_FR' : 'ar_DZ',
       // Referenced explicitly: the image lives at the app root so it is shared
       // by all three locales instead of being generated three times.
-      images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: t.meta.title }],
+      images: [
+        {
+          url: '/opengraph-image',
+          width: 1200,
+          height: 630,
+          alt: t.meta.title,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
@@ -77,28 +88,14 @@ export default function Home({ params }: { params: Params }) {
   if (!locale) notFound()
 
   const t = getContent(locale)
-  const featured = projects.filter(
-    (project) => project.featured && t.projects[project.id]
-  )
 
   return (
     <>
-      <main>
+      <main id="main-content">
         <Hero t={t} />
-        <StartHere t={t} />
-
-        {featured.map((project, index) => (
-          <FeaturedProject
-            key={project.id}
-            project={project}
-            copy={t.projects[project.id]}
-            index={index}
-          />
-        ))}
-
-        <Learn t={t} />
         <Building t={t} />
-        <Proof t={t} />
+        <StartHere t={t} />
+        <Learn t={t} />
         <Tools t={t} />
         <Contact t={t} />
       </main>
