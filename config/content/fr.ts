@@ -11,9 +11,9 @@ export const fr: Content = {
   switcherLabel: 'Langue',
 
   meta: {
-    title: 'Moka Yakoubi — Entrepreneur & créateur.',
+    title: 'Moka Yakoubi — Ton prochain move commence ici.',
     description:
-      'Moka Yakoubi construit des entreprises depuis l’Algérie — Caractère et InvoiceDZ — et partage ce qu’il apprend sur la psychologie, la discipline et la construction de projets.',
+      'Lance ta marque de vêtements, habille ton équipe ou prépare ta séance au studio Caractère Media. Ton premier plan gratuit avec Moka Yakoubi, depuis l’Algérie.',
   },
 
   profile: {
@@ -30,7 +30,7 @@ export const fr: Content = {
       resources: 'Ressources',
       contact: 'Contact',
     },
-    startCta: 'Commence ici',
+    startCta: 'Mon prochain move',
     skip: 'Aller au contenu',
     openMenu: 'Ouvrir le menu',
     closeMenu: 'Fermer le menu',

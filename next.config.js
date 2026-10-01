@@ -5,8 +5,8 @@ const nextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
   },
-  // English lives at '/', so '/en' is not a route — send it home rather than 404.
-  redirects: async () => [{ source: '/en', destination: '/', permanent: true }],
+  // French is the primary conversion page; retain the legacy French URL.
+  redirects: async () => [{ source: '/fr', destination: '/', permanent: true }],
   headers: async () => [
     {
       source: '/:path*',

@@ -1,8 +1,8 @@
 import { DEFAULT_LOCALE, type Locale } from '@/config/content'
 
 /**
- * URL shape: English lives at '/', the others at '/fr' and '/ar'.
- * Keeping '/' as English means the link in the Instagram bio never moves.
+ * URL shape: French lives at '/', the others at '/en' and '/ar'.
+ * The Instagram bio URL stays the same while French becomes the primary language.
  */
 export function localePath(locale: Locale, path = ''): string {
   const prefix = locale === DEFAULT_LOCALE ? '' : `/${locale}`

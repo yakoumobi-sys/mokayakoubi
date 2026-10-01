@@ -1,6 +1,6 @@
 'use client'
 
-import type { ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { track, type EventName } from '@/lib/analytics'
 
 /**
@@ -25,11 +25,22 @@ export function TrackedLink({
   /** Hands the file over instead of navigating to it. */
   download?: boolean
 }) {
+  const [destination, setDestination] = useState(href)
+  useEffect(() => {
+    if (!href.startsWith('/projet/')) return
+    const source = new URLSearchParams(window.location.search)
+    const target = new URL(href, window.location.origin)
+    for (const key of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content']) {
+      const value = source.get(key)
+      if (value) target.searchParams.set(key, value.slice(0, 120))
+    }
+    setDestination(target.pathname + target.search)
+  }, [href])
   const isExternal = !download && (external ?? /^https?:\/\//.test(href))
 
   return (
     <a
-      href={href}
+      href={destination}
       className={className}
       onClick={() => track(event, props)}
       {...(download ? { download: true } : {})}

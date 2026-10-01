@@ -1,3 +1,7 @@
+import { FunnelHome } from '@/components/funnel/home'
+import { FunnelWizard } from '@/components/funnel/wizard'
+import { FunnelPrivacy } from '@/components/funnel/privacy'
+import { funnel, isTrack, tracks } from '@/config/funnel'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import {
@@ -19,13 +23,15 @@ import { Footer } from '@/components/footer'
 
 type Params = { lang?: string[] }
 
-/** '/' is English; '/fr' and '/ar' are their own pages. */
+/** French funnel at '/', preserved editorial translations at '/en' and '/ar'. */
 function readLocale(params: Params): Locale | null {
   const segments = params.lang ?? []
   if (segments.length === 0) return DEFAULT_LOCALE
+  if (segments[0] === 'projet' && segments.length === 2 && isTrack(segments[1])) return 'fr'
+  if (segments.length === 1 && segments[0] === 'confidentialite') return 'fr'
   if (segments.length > 1) return null
   const [segment] = segments
-  // '/en' would duplicate '/', so it is not a route.
+  // The default locale is redirected to '/' by next.config.js.
   if (segment === DEFAULT_LOCALE) return null
   return isLocale(segment) ? segment : null
 }
@@ -33,6 +39,8 @@ function readLocale(params: Params): Locale | null {
 export function generateStaticParams(): Params[] {
   return [
     { lang: [] },
+    ...tracks.map(track => ({ lang: ['projet', track] })),
+    { lang: ['confidentialite'] },
     ...LOCALES.filter((locale) => locale !== DEFAULT_LOCALE).map((locale) => ({
       lang: [locale],
     })),
@@ -43,10 +51,16 @@ export function generateMetadata({ params }: { params: Params }): Metadata {
   const locale = readLocale(params)
   if (!locale) return {}
 
+  if (params.lang?.[0] === 'projet' && isTrack(params.lang[1])) {
+    const item = funnel[params.lang[1]]
+    return { metadataBase: new URL(site.url), title: `${item.label} — Moka Yakoubi`, description: item.description, alternates: { canonical: `/projet/${params.lang[1]}` } }
+  }
+  if (params.lang?.[0] === 'confidentialite') return {metadataBase:new URL(site.url),title:'Confidentialité — Moka Yakoubi', alternates:{canonical:'/confidentialite'}}
   const t = getContent(locale)
   const path = localePath(locale)
 
   return {
+    metadataBase: new URL(site.url),
     title: t.meta.title,
     description: t.meta.description,
     alternates: {
@@ -87,6 +101,9 @@ export default function Home({ params }: { params: Params }) {
   const locale = readLocale(params)
   if (!locale) notFound()
 
+  if (params.lang?.[0] === 'projet' && isTrack(params.lang[1])) return <FunnelWizard key={params.lang[1]} track={params.lang[1]} />
+  if (params.lang?.[0] === 'confidentialite') return <FunnelPrivacy />
+  if (locale === 'fr') return <FunnelHome />
   const t = getContent(locale)
 
   return (

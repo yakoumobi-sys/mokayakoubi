@@ -12,6 +12,12 @@ import { analytics } from '@/config/site'
 
 /** Every conversion point on the site. Keep this list short and stable. */
 export const EVENTS = {
+  funnelStart: 'funnel_started',
+  funnelStep: 'funnel_step_completed',
+  funnelResult: 'funnel_result_viewed',
+  funnelDownload: 'funnel_plan_downloaded',
+  funnelContact: 'funnel_contact_opened',
+  funnelLead: 'funnel_lead_saved',
   startHere: 'cta_start_here',
   playbook: 'cta_playbook',
   playbookSuccess: 'playbook_subscribed',

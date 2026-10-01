@@ -124,3 +124,8 @@ config/site.ts          ← structure, links, numbers
 config/content/         ← every word, one file per language
 lib/                    analytics, locale paths, subscriber providers, supabase
 ```
+
+
+## Nouveau funnel — Ton prochain move
+
+Voir [le guide d’exploitation](docs/FUNNEL-EXPLOITATION.md) pour les parcours, les fichiers, l’activation des demandes et le suivi. La page principale est maintenant en français ; l’anglais reste accessible sur `/en`.
