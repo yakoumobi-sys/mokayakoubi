@@ -25,7 +25,9 @@ export function FunnelHome() {
       <div className="move-section-heading"><p className="move-kicker">TON PROCHAIN MOVE</p><div><h2>Qu’est-ce que tu veux<br /><em>concrétiser ?</em></h2><p>Trois chemins. Un point de départ : ton projet.</p></div></div>
       <div className="move-cards">{tracks.map(id => { const item = funnel[id]; return <TrackedLink key={id} href={`/projet/${id}`} event={EVENTS.funnelStart} props={{ track: id, place: 'home' }} className={`move-card move-card-${id}`}>
         <div className="move-card-top"><span>{item.brand}</span><span>{item.number} /</span></div>
-        <div className="move-art" aria-hidden="true">{id === 'marque' ? <div className="move-shirt"><span>YOUR<br />BRAND<span>®</span></span></div> : id === 'equipe' ? <div className="move-team"><div>VOTRE<br />LOGO</div><div>VOTRE<br />LOGO</div><div>VOTRE<br />LOGO</div></div> : <div className="move-sound"><span className="move-rec">● REC</span><div>{[22,48,70,40,92,62,100,50,78,38,62,26].map((height,i)=><i key={i} style={{height}} />)}</div></div>}</div>
+        <div style={{ position: 'relative', aspectRatio: '3 / 2', marginTop: 20, overflow: 'hidden' }}>
+          <Image src={`/images/funnel/${id}.webp`} alt={id === 'marque' ? 'Hoodie streetwear noir délavé avec un grand graphisme dans le dos' : id === 'equipe' ? 'Trois hommes au travail en uniforme, polo et t-shirt portant le même logo' : 'Deux personnes enregistrent un podcast avec des micros et une caméra'} fill sizes="(max-width: 760px) 100vw, 33vw" className="object-cover" />
+        </div>
         <div className="move-card-copy"><h3>{item.label}</h3><p>{item.benefit}</p><span className="move-card-link">{item.cta}<span aria-hidden="true">↗</span></span></div>
       </TrackedLink> })}</div>
     </section>
