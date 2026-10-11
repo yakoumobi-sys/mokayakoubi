@@ -1,7 +1,7 @@
-name: 1% CLUB preview build
+name: 1% CLUB build
 on:
   push:
-    branches: [feat/one-percent-club]
+    branches: [main, feat/one-percent-club]
   workflow_dispatch:
 jobs:
   build:
