@@ -1,124 +1,36 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Instrument_Serif, IBM_Plex_Sans_Arabic } from 'next/font/google'
-import { Nav } from '@/components/nav'
-import { Analytics } from '@/components/analytics'
-import { getContent, isLocale, DEFAULT_LOCALE, type Locale } from '@/config/content'
-import { contact, profile, projects, site, socialLinks } from '@/config/site'
-import { localePath } from '@/lib/locale'
+import { Inter, Instrument_Serif } from 'next/font/google'
 import '../globals.css'
+import '../club.css'
 
-const sans = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-sans',
-})
-
-/** Used for two things only: project numbers and the project plates. */
-const serif = Instrument_Serif({
-  subsets: ['latin'],
-  weight: '400',
-  display: 'swap',
-  variable: '--font-serif',
-})
-
-/** Only pulled in on the Arabic page — never preloaded on the others. */
-const arabic = IBM_Plex_Sans_Arabic({
-  subsets: ['arabic'],
-  weight: ['400', '500', '600'],
-  display: 'swap',
-  preload: false,
-  variable: '--font-arabic',
-})
+const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--oc-sans' })
+const instrument = Instrument_Serif({ subsets: ['latin'], weight: '400', display: 'swap', variable: '--oc-serif' })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(site.url),
-  keywords: [...site.keywords],
-  authors: [{ name: profile.name, url: site.url }],
-  creator: profile.name,
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true, 'max-image-preview': 'large' },
-  },
+  metadataBase: new URL('https://mokayakoubi.vercel.app'),
+  title: { default: '1% CLUB — Build Different | By MOKA', template: '%s | 1% CLUB' },
+  description: 'Un cercle privé pour les fondateurs ambitieux en Algérie. Rencontres, masterclasses, accountability et connexions qui font avancer. 1% CLUB by MOKA.',
+  keywords: ['1% Club', 'Moka Yakoubi', 'entrepreneurs Algérie', 'mastermind Alger', 'founders community'],
+  robots: { index: true, follow: true },
+  openGraph: { title: '1% CLUB — Build Different', description: 'Un cercle privé pour ceux qui construisent.', siteName: '1% CLUB by MOKA', type: 'website', locale: 'fr_DZ', url: 'https://mokayakoubi.vercel.app', images: ['/opengraph-image'] },
+  twitter: { card: 'summary_large_image', title: '1% CLUB — Build Different', images: ['/opengraph-image'] },
 }
 
 export const viewport: Viewport = {
-  themeColor: '#ffffff',
-  colorScheme: 'light',
-  width: 'device-width',
-  initialScale: 1,
-  viewportFit: 'cover',
+  themeColor: '#0a0b0b', colorScheme: 'dark', width: 'device-width', initialScale: 1,
 }
 
-function readLocale(params: { lang?: string[] }): Locale {
-  const segment = params.lang?.[0]
-  return segment && isLocale(segment) ? segment : DEFAULT_LOCALE
-}
-
-/** Person (+ the companies he founded) for search engines. */
-function StructuredData({ locale }: { locale: Locale }) {
-  const t = getContent(locale)
-  const knownProjects = projects.filter((project) => project.url && t.projects[project.id])
-  const sameAs = socialLinks.map((link) => link.url).filter(Boolean)
-
-  const person = {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
-    name: profile.name,
-    alternateName: profile.alternateName,
-    url: `${site.url}${localePath(locale) === '/' ? '' : localePath(locale)}`,
-    description: t.meta.description,
-    jobTitle: 'Founder',
-    address: { '@type': 'PostalAddress', addressCountry: profile.countryCode },
-    ...(contact.email ? { email: `mailto:${contact.email}` } : {}),
-    ...(profile.photo ? { image: `${site.url}${profile.photo}` } : {}),
-    ...(knownProjects.length > 0
-      ? {
-          worksFor: knownProjects.map((project) => ({
-            '@type': 'Organization',
-            name: t.projects[project.id].name,
-            url: project.url,
-          })),
-        }
-      : {}),
-    ...(sameAs.length > 0 ? { sameAs } : {}),
-  }
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(person) }}
-    />
-  )
-}
-
-export default function RootLayout({
-  children,
-  params,
-}: {
-  children: React.ReactNode
-  params: { lang?: string[] }
-}) {
-  const locale = readLocale(params)
-  const t = getContent(locale)
-
-  return (
-    <html
-      lang={locale}
-      dir={t.dir}
-      className={`${sans.variable} ${serif.variable} ${arabic.variable}`}
-    >
-      <head>
-        {/* Without JS the reveal animation must never hide content. */}
-        <noscript>
-          <style>{`.reveal{opacity:1 !important;transform:none !important}`}</style>
-        </noscript>
-      </head>
-      <body className={`antialiased ${t.dir === 'rtl' ? 'font-arabic' : 'font-sans'}`}>
-        <Nav t={t} />
+    <html lang="fr" className={inter.variable + ' ' + instrument.variable}>
+      <body className="oc-body">
         {children}
-        <StructuredData locale={locale} />
-        <Analytics />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          '@context': 'https://schema.org', '@type': 'Organization', name: '1% CLUB by MOKA',
+          url: 'https://mokayakoubi.vercel.app',
+          founder: { '@type': 'Person', name: 'Mohamed Yakoubi', alternateName: 'MOKA', sameAs: ['https://www.instagram.com/mokayakoubi'] },
+          description: 'Communauté privée d’entrepreneurs en Algérie, en préparation.'
+        }) }} />
       </body>
     </html>
   )
