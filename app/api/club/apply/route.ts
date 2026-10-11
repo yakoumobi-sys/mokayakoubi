@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSupabaseAdmin } from '@/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -35,10 +36,15 @@ export async function POST(req: NextRequest) {
       const r=await fetch(url,{method:'POST',redirect:'error',headers:{'Content-Type':'application/json','Idempotency-Key':id,...(process.env.CLUB_APPLICATION_WEBHOOK_TOKEN?{Authorization:'Bearer '+process.env.CLUB_APPLICATION_WEBHOOK_TOKEN}:{})},body:JSON.stringify(payload),signal:AbortSignal.timeout(10000)})
       if (!r.ok) throw new Error('Webhook failed')
     } else {
-      const db=getSupabaseAdmin()
-      if (!db) return reply({ok:false,message:'Les candidatures en ligne sont momentanément indisponibles. Tu peux envoyer ta demande par e-mail.'},503)
-      const {error}=await db.from('club_applications').upsert(payload,{onConflict:'id',ignoreDuplicates:true}).abortSignal(AbortSignal.timeout(10000))
-      if (error) throw error
+      // The publishable key is intentionally public. Database RLS grants anon INSERT only;
+      // anonymous users can never read, edit, or delete applications.
+      const db=getSupabaseAdmin() || createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://hhlqwtwecywuowtshxtu.supabase.co',
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_Gg3W1N39qWhcnRa6aJ7jxQ_OKIbSf4p',
+        {auth:{persistSession:false,autoRefreshToken:false}}
+      )
+      const {error}=await db.from('club_applications').insert(payload).abortSignal(AbortSignal.timeout(10000))
+      if (error && error.code !== '23505') throw error
     }
     return reply({ok:true,reference:'1PC-'+id.slice(0,8).toUpperCase()},201)
   } catch(e) {

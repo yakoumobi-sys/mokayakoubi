@@ -9,10 +9,11 @@ Production : https://mokayakoubi.vercel.app
 La route `POST /api/club/apply` exige un stockage effectif ; elle ne répond 201 que lorsque la destination confirme l'enregistrement.
 
 **Option Supabase :**
-1. Activer le projet Supabase lié à ce site.
-2. Exécuter `database-club.sql` dans SQL Editor.
-3. Configurer `NEXT_PUBLIC_SUPABASE_URL` et `SUPABASE_SERVICE_ROLE_KEY` en variables serveur Vercel. Ne jamais utiliser la service role côté navigateur.
-4. Tester un formulaire de candidature réel puis supprimer l'enregistrement de test.
+1. Projet Supabase "Mokayakoubi" restauré et table `club_applications` créée.
+2. La route serveur utilise en priorité `SUPABASE_SERVICE_ROLE_KEY` avec `NEXT_PUBLIC_SUPABASE_URL` si configurées.
+3. Sinon, elle utilise la clé publique publishable de ce projet (sans secret), avec Row Level Security limitant l'anonyme à INSERT uniquement. Il est impossible de lire une candidature depuis le navigateur.
+4. Tester un formulaire réel et supprimer la ligne test depuis l'éditeur Supabase.
+5. Pour la maintenance, tourner la publishable key et remplacer la clé de repli dans la route, ou utiliser `NEXT_PUBLIC_SUPABASE_ANON_KEY` via Vercel.
 
 **Option webhook :**
 Configurer `CLUB_APPLICATION_WEBHOOK_URL` (HTTPS) et éventuellement `CLUB_APPLICATION_WEBHOOK_TOKEN`. L'endpoint doit enregistrer l'entrée durablement et renvoyer un code 2xx ; il reçoit `Idempotency-Key`.

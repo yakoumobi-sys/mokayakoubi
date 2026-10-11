@@ -65,7 +65,7 @@ export function ClubSite() {
 
       <section className="oc-stats" aria-label="Le concept en chiffres">
         <div className="oc-shell oc-stats-grid">
-          <div><strong>30<span>+</span></strong><p>PLACES MAXIMUM ENVISAGÉES<br />POUR LA COHORTE FONDATRICE</p></div>
+          <div><strong>30</strong><p>PLACES MAXIMUM ENVISAGÉES<br />POUR LA COHORTE FONDATRICE</p></div>
           <div><strong>90<span>J</span></strong><p>UN CYCLE POUR<br />PASSER À L’ACTION</p></div>
           <div><strong>01<span>%</span></strong><p>UNE MENTALITÉ.<br />PAS UN TITRE.</p></div>
         </div>
