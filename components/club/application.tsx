@@ -51,7 +51,7 @@ export function ClubApplication() {
 
   return <form className="oc-form" onSubmit={submit}>
     <div className="oc-form-head"><span>FOUNDING 30</span><span>01 — APPLICATION</span></div>
-    <h3>LET'S GET<br /><em>TO KNOW YOU.</em></h3>
+    <h3>LET’S GET<br /><em>TO KNOW YOU.</em></h3>
     <p className="oc-form-subtitle">Quelques questions, 3 minutes environ. Pas de paiement. Pas de promesses : simplement une première rencontre.</p>
     <div className="oc-form-fields">
       <div className="oc-field-grid">
@@ -62,17 +62,17 @@ export function ClubApplication() {
         <label>TON E-MAIL <span>*</span><input type="email" required maxLength={254} autoComplete="email" placeholder="toi@entreprise.com" value={data.email} onChange={e=>edit('email',e.target.value)}/></label>
         <label>WHATSAPP <span>*</span><input type="tel" required maxLength={32} autoComplete="tel" placeholder="+213 5XX XX XX XX" value={data.phone} onChange={e=>edit('phone',e.target.value)}/></label>
       </div>
-      <label>OÙ EN ES-TU ? <span>*</span><select required value={data.stage} onChange={e=>edit('stage',e.target.value)}><option value="">Choisis ton stade</option><option value="Entreprise en activité">J'ai une entreprise en activité</option><option value="Projet lancé / premières ventes">J'ai lancé un projet / mes premières ventes</option><option value="Projet en préparation">Je prépare activement mon lancement</option></select></label>
-      <label>QU'EST-CE QUE TU CONSTRUIS ? <span>*</span><textarea required minLength={15} maxLength={1200} rows={3} placeholder="Ton activité, tes clients, ce que tu fais aujourd'hui..." value={data.business} onChange={e=>edit('business',e.target.value)}/></label>
+      <label>OÙ EN ES-TU ? <span>*</span><select required value={data.stage} onChange={e=>edit('stage',e.target.value)}><option value="">Choisis ton stade</option><option value="Entreprise en activité">J’ai une entreprise en activité</option><option value="Projet lancé / premières ventes">J’ai lancé un projet / mes premières ventes</option><option value="Projet en préparation">Je prépare activement mon lancement</option></select></label>
+      <label>QU’EST-CE QUE TU CONSTRUIS ? <span>*</span><textarea required minLength={15} maxLength={1200} rows={3} placeholder="Ton activité, tes clients, ce que tu fais aujourd'hui..." value={data.business} onChange={e=>edit('business',e.target.value)}/></label>
       <label>TON OBJECTIF POUR LES 90 PROCHAINS JOURS ? <span>*</span><textarea required minLength={15} maxLength={1200} rows={3} placeholder="Un objectif réel et précis." value={data.goal} onChange={e=>edit('goal',e.target.value)}/></label>
-      <label>QU'EST-CE QUE TU PEUX APPORTER AU CERCLE ? <span>*</span><textarea required minLength={15} maxLength={1200} rows={3} placeholder="Expérience, compétences, contacts, entraide..." value={data.contribution} onChange={e=>edit('contribution',e.target.value)}/></label>
+      <label>QU’EST-CE QUE TU PEUX APPORTER AU CERCLE ? <span>*</span><textarea required minLength={15} maxLength={1200} rows={3} placeholder="Expérience, compétences, contacts, entraide..." value={data.contribution} onChange={e=>edit('contribution',e.target.value)}/></label>
       <label>INSTAGRAM OU LINKEDIN <span className="oc-optional">(FACULTATIF)</span><input maxLength={200} placeholder="@tonprofil ou lien" value={data.instagram} onChange={e=>edit('instagram',e.target.value)}/></label>
       <div className="oc-honeypot" aria-hidden="true"><label>Site web<input tabIndex={-1} autoComplete="off" value={data.website} onChange={e=>edit('website',e.target.value)}/></label></div>
-      <label className="oc-check"><input type="checkbox" required checked={data.consent} onChange={e=>edit('consent',e.target.checked)}/><span>J'accepte que mes informations soient utilisées pour étudier ma candidature et me recontacter. <a href="/confidentialite" target="_blank" rel="noopener noreferrer">Confidentialité ↗</a></span></label>
+      <label className="oc-check"><input type="checkbox" required checked={data.consent} onChange={e=>edit('consent',e.target.checked)}/><span>J’accepte que mes informations soient utilisées pour étudier ma candidature et me recontacter. <a href="/confidentialite" target="_blank" rel="noopener noreferrer">Confidentialité ↗</a></span></label>
     </div>
     {error && <div role="alert" className="oc-form-error">{error}{failed && <p>Tu peux aussi transmettre ta candidature via ton application e-mail.</p>}</div>}
     {failed && data.consent && <a className="oc-fallback" href={emailFallback}>OU ENVOYER MA CANDIDATURE PAR E-MAIL ↗</a>}
     <button className="oc-form-submit" type="submit" disabled={busy}>{busy?'ENREGISTREMENT...':'ENVOYER MA CANDIDATURE'}<span aria-hidden="true">{busy?'…':'↗'}</span></button>
-    <p className="oc-fine-print">Une candidature ne garantit pas une place. Aucun paiement n'est demandé ici.</p>
+    <p className="oc-fine-print">Une candidature ne garantit pas une place. Aucun paiement n’est demandé ici.</p>
   </form>
 }
