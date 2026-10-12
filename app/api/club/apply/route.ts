@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSupabaseAdmin } from '@/lib/supabase'
 import { createClient } from '@supabase/supabase-js'
+import { notifySubmission } from '@/lib/notifications'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -46,7 +47,21 @@ export async function POST(req: NextRequest) {
       const {error}=await db.from('club_applications').insert(payload).abortSignal(AbortSignal.timeout(10000))
       if (error && error.code !== '23505') throw error
     }
-    return reply({ok:true,reference:'1PC-'+id.slice(0,8).toUpperCase()},201)
+    // A validated and stored application generates a complete private notification.
+    const notice=await notifySubmission({
+      kind:'club',reference:id,
+      subject:'[DZ FOUNDERS CLUB] Nouvelle candidature — '+name,
+      replyTo:email,
+      fields:{
+        'Type':'Candidature DZ Founders Club',
+        'Référence':id,'Nom complet':name,'E-mail':email,'WhatsApp':phone,
+        'Ville':city,'Situation entrepreneuriale':stage,'Activité / entreprise':business,
+        'Objectif 90 jours':goal,'Contribution au club':contribution,
+        'Instagram / LinkedIn':instagram||'Non renseigné',
+        'Consentement':'Oui','Date de consentement':payload.consent_at,
+      }
+    })
+    return reply({ok:true,reference:'DZFC-'+id.slice(0,8).toUpperCase(),notification:notice==='unavailable'?'delayed':notice},201)
   } catch(e) {
     console.error('[club/apply] Storage failed',e instanceof Error?e.message:'unknown')
     return reply({ok:false,message:'Impossible de confirmer l’enregistrement pour le moment. Réessaie ou utilise l’envoi par e-mail.'},502)
