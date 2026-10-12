@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import Link from 'next/link'
 import { ClubApplication } from '@/components/club/application'
+import { ContactForm, NewsletterSignup } from '@/components/moka/forms'
 import { MokaFrame, VideoCard, videos } from '@/components/moka/site'
 
 function PageHero({ kicker, first, emphasis, description }: { kicker: string; first: string; emphasis: string; description: string }) {
@@ -26,6 +27,7 @@ export function ResourcesPage() {
         <article className="mk-resource-card"><span>GUIDE 01 / PDF</span><h3>THE MOKA PLAYBOOK.</h3><p>Un support de travail à lire, annoter et mettre en pratique.</p><a className="mk-text-link" href="/the-moka-playbook-fr.pdf" target="_blank" rel="noopener noreferrer">OUVRIR LE GUIDE ↗</a></article>
         <article className="mk-resource-card"><span>GUIDE 02 / PDF</span><h3>BUILD YOUR BRAND.</h3><p>Un guide pour réfléchir à ta marque et à ce que tu veux réellement construire.</p><a className="mk-text-link" href="/build-your-brand-caractere-fr.pdf" target="_blank" rel="noopener noreferrer">OUVRIR LE GUIDE ↗</a></article>
       </div>
+      <NewsletterSignup source="ressources" />
       <FooterCTA title="DON'T LEARN ALONE." text="Tu veux rencontrer d'autres entrepreneurs, échanger et progresser dans un cercle de fondateurs ? Découvre le concept DZ Founders Club." href="/club" label="DÉCOUVRIR LE CLUB" />
     </div></section>
   </main></MokaFrame>
@@ -78,7 +80,7 @@ export function PartnershipsPage() {
       <div className="mk-section-top"><span>002 / CONTACT</span><span>SEND YOUR BRIEF</span></div>
       <h2>HAVE SOMETHING<br/><em>IN MIND?</em></h2>
       <p className="mk-page-copy">Pour une réponse utile, précise la marque ou l'organisation, les objectifs, le calendrier, le budget indicatif et les livrables souhaités. Je n'affiche pas de chiffres d'audience non vérifiés : un media kit à jour peut être préparé pour les partenaires sérieux.</p>
-      <a className="mk-big-link" href="mailto:yakoumobi@gmail.com?subject=Collaboration%20avec%20Moka&body=Bonjour%20Moka%2C%0A%0AMarque%20%2F%20Organisation%20%3A%0AType%20de%20collaboration%20%3A%0AObjectif%20%3A%0ADate%20%3A%0ABudget%20indicatif%20%3A%0AContact%20%3A"><span>ENVOYER UNE PROPOSITION PAR E-MAIL</span><span>↗</span></a>
+      <ContactForm />
       <a className="mk-big-link" href="https://www.instagram.com/mokayakoubi/" target="_blank" rel="noopener noreferrer"><span>RETROUVER MOKA SUR INSTAGRAM</span><span>↗</span></a>
     </div></section>
   </main></MokaFrame>

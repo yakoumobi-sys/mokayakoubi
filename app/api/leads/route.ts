@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getSupabaseAdmin } from '@/lib/supabase'
 import { validateLead } from '@/lib/leads-validation'
+import { notifySubmission } from '@/lib/notifications'
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 const json = (data: object, status: number) => NextResponse.json(data, {status, headers: {'Cache-Control':'no-store'}})
@@ -33,7 +34,20 @@ export async function POST(request: NextRequest) {
       const {error} = await db.from('project_leads').upsert(payload,{onConflict:'id',ignoreDuplicates:true}).abortSignal(AbortSignal.timeout(10000))
       if (error) throw new Error('Lead storage unavailable')
     }
-    return json({ok:true,reference:`MOKA-${lead.requestId.slice(0,8).toUpperCase()}`},201)
+    const notice=await notifySubmission({
+      kind:'project',reference:lead.requestId,
+      subject:'[MOKA] Nouveau brief — '+lead.track+' — '+lead.name,
+      replyTo:lead.email||undefined,
+      fields:{
+        'Type de projet':lead.track,'Référence':lead.requestId,'Nom':lead.name,
+        'Téléphone / WhatsApp':lead.phone,'E-mail':lead.email,
+        'Canal préféré':lead.channel,'Réponses au questionnaire':lead.answers,
+        'Informations complémentaires':lead.details,
+        'Date souhaitée':lead.date,'Attribution':lead.attribution,
+        'Consentement':'Oui','Date de consentement':payload.consent_at,
+      }
+    })
+    return json({ok:true,reference:`MOKA-${lead.requestId.slice(0,8).toUpperCase()}`,notification:notice==='unavailable'?'delayed':notice},201)
   } catch {
     console.error('[leads] persistence unavailable')
     return json({ok:false,message:'L’enregistrement n’a pas pu être confirmé. Réessaie ou envoie ton brief par e-mail.'},502)

@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { NewsletterSignup } from '@/components/moka/forms'
 
 export const videos = [
   { id: 'zI1PW5HC3BM', label: 'CONFÉRENCE 01', title: 'Apprendre avec Moka', description: 'Une conférence à retrouver gratuitement sur YouTube.', url: 'https://youtu.be/zI1PW5HC3BM?si=CZGH5sWfz7TyHlcd' },
@@ -84,6 +85,7 @@ export function MokaHome() {
         <div className="mk-section-top"><span>003 / CONTENU GRATUIT</span><span>REAL LESSONS. NO GATEKEEPING.</span></div>
         <div className="mk-learn-heading"><h2>KNOWLEDGE<br/><em>IS FOR SHARING.</em></h2><div><p>Des conférences complètes à regarder gratuitement. Pas de formulaire obligatoire, pas de paywall : tu cliques et tu apprends.</p><Link className="mk-text-link" href="/ressources">TOUTES LES RESSOURCES ↗</Link></div></div>
         <div className="mk-videos">{videos.map((video,i)=><VideoCard video={video} number={String(i+1).padStart(2,'0')} key={video.id}/>)}</div>
+        <NewsletterSignup source="accueil" />
         <Link className="mk-guide-strip" href="/the-moka-playbook-fr.pdf" target="_blank"><span className="mk-guide-icon">↓</span><span><small>PDF GRATUIT · THE MOKA PLAYBOOK</small><strong>DES IDÉES À METTRE EN ACTION.</strong></span><span className="mk-guide-arrow">TÉLÉCHARGER ↗</span></Link>
       </div></section>
 
