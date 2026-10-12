@@ -51,7 +51,7 @@ export async function sendQueuedNotification(id:string): Promise<EmailState> {
   const db = getSupabaseAdmin()
   if (!db || !isNotificationConfigured()) return 'queued'
   const {data:row,error:claimError} = await db.from('notification_outbox')
-    .update({status:'sending'})
+    .update({status:'sending',next_attempt_at:new Date(Date.now()+15*60_000).toISOString()})
     .eq('id',id).eq('status','pending')
     .lte('next_attempt_at',new Date().toISOString())
     .select('id,event_key,subject,fields,reply_to,attempts').maybeSingle()
@@ -107,7 +107,7 @@ export async function retryQueuedNotifications(limit=25) {
   if (!db || !isNotificationConfigured()) return {configured:false,processed:0,sent:0}
   // Recover jobs interrupted while sending. Resend's idempotency key prevents duplicate emails.
   await db.from('notification_outbox').update({status:'pending'})
-    .eq('status','sending').lt('created_at',new Date(Date.now()-15*60_000).toISOString())
+    .eq('status','sending').lt('next_attempt_at',new Date().toISOString())
   const {data,error}=await db.from('notification_outbox').select('id')
     .eq('status','pending').lte('next_attempt_at',new Date().toISOString())
     .order('created_at',{ascending:true}).limit(limit)
