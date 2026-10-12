@@ -47,7 +47,7 @@ export function ClubApplication() {
     } finally { setBusy(false) }
   }
 
-  if (reference) return <div className="oc-form oc-form-success" role="status"><span className="oc-success-sign">✓</span><span className="oc-form-label">APPLICATION RECEIVED</span><h3>BIENVENUE<br />DANS L'AVENTURE.</h3><p>Ta candidature a bien été enregistrée. Si ton profil correspond à le cercle fondateur, l’équipe te contactera.</p><div className="oc-reference">RÉFÉRENCE : {reference}</div><p className="oc-fine-print">Ce message confirme la réception, pas l’admission au club.</p><a href="#top" className="oc-link-reset">RETOUR À L’ACCUEIL ↑</a></div>
+  if (reference) return <div className="oc-form oc-form-success" role="status"><span className="oc-success-sign">✓</span><span className="oc-form-label">APPLICATION RECEIVED</span><h3>BIENVENUE<br />DANS L’AVENTURE.</h3><p>Ta candidature a bien été enregistrée. Si ton profil correspond à le cercle fondateur, l’équipe te contactera.</p><div className="oc-reference">RÉFÉRENCE : {reference}</div><p className="oc-fine-print">Ce message confirme la réception, pas l’admission au club.</p><a href="#top" className="oc-link-reset">RETOUR À L’ACCUEIL ↑</a></div>
 
   return <form className="oc-form" onSubmit={submit}>
     <div className="oc-form-head"><span>DZ FOUNDERS CLUB</span><span>01 — APPLICATION</span></div>
