@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import Link from 'next/link'
 import { ClubApplication } from '@/components/club/application'
 import { MokaFrame, VideoCard, videos } from '@/components/moka/site'
