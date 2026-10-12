@@ -27,6 +27,7 @@ export function ResourcesPage() {
         <article className="mk-resource-card"><span>GUIDE 01 / PDF</span><h3>THE MOKA PLAYBOOK.</h3><p>Un support de travail à lire, annoter et mettre en pratique.</p><a className="mk-text-link" href="/the-moka-playbook-fr.pdf" target="_blank" rel="noopener noreferrer">OUVRIR LE GUIDE ↗</a></article>
         <article className="mk-resource-card"><span>GUIDE 02 / PDF</span><h3>BUILD YOUR BRAND.</h3><p>Un guide pour réfléchir à ta marque et à ce que tu veux réellement construire.</p><a className="mk-text-link" href="/build-your-brand-caractere-fr.pdf" target="_blank" rel="noopener noreferrer">OUVRIR LE GUIDE ↗</a></article>
       </div>
+      <NewsletterSignup source="ressources" />
       <FooterCTA title="DON'T LEARN ALONE." text="Tu veux rencontrer d'autres entrepreneurs, échanger et progresser dans un cercle de fondateurs ? Découvre le concept DZ Founders Club." href="/club" label="DÉCOUVRIR LE CLUB" />
     </div></section>
   </main></MokaFrame>
