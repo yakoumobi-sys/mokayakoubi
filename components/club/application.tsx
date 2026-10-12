@@ -13,7 +13,7 @@ export function ClubApplication() {
   const edit = (key: keyof FormValues, value: string|boolean) => setData(v=>({ ...v, [key]:value }))
   const emailFallback = useMemo(() => {
     const text = [
-      'CANDIDATURE — 1% CLUB',
+      'CANDIDATURE — DZ FOUNDERS CLUB',
       'Nom : '+data.name,
       'Email : '+data.email,
       'WhatsApp : '+data.phone,
@@ -25,7 +25,7 @@ export function ClubApplication() {
       'Instagram : '+data.instagram,
       'Consentement à être recontacté : '+(data.consent ? 'Oui' : 'Non'),
     ].join('\n')
-    return 'mailto:yakoumobi@gmail.com?subject='+encodeURIComponent('Candidature 1% CLUB — '+data.name)+'&body='+encodeURIComponent(text)
+    return 'mailto:yakoumobi@gmail.com?subject='+encodeURIComponent('Candidature DZ Founders Club — '+data.name)+'&body='+encodeURIComponent(text)
   },[data])
 
   async function submit(e: FormEvent<HTMLFormElement>) {
@@ -47,11 +47,11 @@ export function ClubApplication() {
     } finally { setBusy(false) }
   }
 
-  if (reference) return <div className="oc-form oc-form-success" role="status"><span className="oc-success-sign">✓</span><span className="oc-form-label">APPLICATION RECEIVED</span><h3>TON PREMIER<br />MOVE EST FAIT.</h3><p>Ta candidature a bien été enregistrée. Si ton profil correspond à la première cohorte, l’équipe te contactera.</p><div className="oc-reference">RÉFÉRENCE : {reference}</div><p className="oc-fine-print">Ce message confirme la réception, pas l’admission au club.</p><a href="#top" className="oc-link-reset">RETOUR À L’ACCUEIL ↑</a></div>
+  if (reference) return <div className="oc-form oc-form-success" role="status"><span className="oc-success-sign">✓</span><span className="oc-form-label">APPLICATION RECEIVED</span><h3>BIENVENUE<br />DANS L’AVENTURE.</h3><p>Ta candidature a bien été enregistrée. Si ton profil correspond à le cercle fondateur, l’équipe te contactera.</p><div className="oc-reference">RÉFÉRENCE : {reference}</div><p className="oc-fine-print">Ce message confirme la réception, pas l’admission au club.</p><a href="#top" className="oc-link-reset">RETOUR À L’ACCUEIL ↑</a></div>
 
   return <form className="oc-form" onSubmit={submit}>
-    <div className="oc-form-head"><span>FOUNDING 30</span><span>01 — APPLICATION</span></div>
-    <h3>LET’S GET<br /><em>TO KNOW YOU.</em></h3>
+    <div className="oc-form-head"><span>DZ FOUNDERS CLUB</span><span>01 — APPLICATION</span></div>
+    <h3>LET’S BUILD<br /><em>TOGETHER.</em></h3>
     <p className="oc-form-subtitle">Quelques questions, 3 minutes environ. Pas de paiement. Pas de promesses : simplement une première rencontre.</p>
     <div className="oc-form-fields">
       <div className="oc-field-grid">

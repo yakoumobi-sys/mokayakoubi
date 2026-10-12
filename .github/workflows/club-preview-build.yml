@@ -1,8 +1,12 @@
-name: 1% CLUB build
+name: MOKA website validation
 on:
   push:
-    branches: [main, feat/one-percent-club]
+    branches: [main, feat/one-percent-club, feat/moka-hub-oct-2026]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
+permissions:
+  contents: read
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,4 +17,5 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci
+      - run: npm run typecheck
       - run: npm run build

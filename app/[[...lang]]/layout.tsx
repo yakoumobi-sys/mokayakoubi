@@ -2,36 +2,22 @@ import type { Metadata, Viewport } from 'next'
 import { Inter, Instrument_Serif } from 'next/font/google'
 import '../globals.css'
 import '../club.css'
+import '../moka.css'
 
 const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--oc-sans' })
 const instrument = Instrument_Serif({ subsets: ['latin'], weight: '400', display: 'swap', variable: '--oc-serif' })
 
-export const metadata: Metadata = {
-  metadataBase: new URL('https://mokayakoubi.vercel.app'),
-  title: { default: '1% CLUB — Build Different | By MOKA', template: '%s | 1% CLUB' },
-  description: 'Un cercle privé pour les fondateurs ambitieux en Algérie. Rencontres, masterclasses, accountability et connexions qui font avancer. 1% CLUB by MOKA.',
-  keywords: ['1% Club', 'Moka Yakoubi', 'entrepreneurs Algérie', 'mastermind Alger', 'founders community'],
-  robots: { index: true, follow: true },
-  openGraph: { title: '1% CLUB — Build Different', description: 'Un cercle privé pour ceux qui construisent.', siteName: '1% CLUB by MOKA', type: 'website', locale: 'fr_DZ', url: 'https://mokayakoubi.vercel.app', images: ['/opengraph-image'] },
-  twitter: { card: 'summary_large_image', title: '1% CLUB — Build Different', images: ['/opengraph-image'] },
+const base='https://mokayakoubi.vercel.app'
+export const metadata:Metadata={
+ metadataBase:new URL(base),
+ title:{default:'Moka Yakoubi — Entrepreneur, Creator & Builder',template:'%s | Moka Yakoubi'},
+ description:'Le site officiel de Moka Yakoubi : entrepreneuriat, ressources gratuites, conférences, Caractère et DZ Founders Club.',
+ keywords:['Moka Yakoubi','Mohamed Yakoubi','entrepreneur Algérie','Caractère','DZ Founders Club','conférences','création de marque'],
+ robots:{index:true,follow:true},
+ openGraph:{title:'Moka Yakoubi — I Build It.',description:'Entrepreneur, creator, builder. Conférences gratuites, projets et DZ Founders Club.',siteName:'Moka Yakoubi',type:'website',locale:'fr_DZ',url:base,images:['/opengraph-image']},
+ twitter:{card:'summary_large_image',title:'Moka Yakoubi — I Build It.',images:['/opengraph-image']}
 }
-
-export const viewport: Viewport = {
-  themeColor: '#0a0b0b', colorScheme: 'dark', width: 'device-width', initialScale: 1,
-}
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="fr" className={inter.variable + ' ' + instrument.variable}>
-      <body className="oc-body">
-        {children}
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          '@context': 'https://schema.org', '@type': 'Organization', name: '1% CLUB by MOKA',
-          url: 'https://mokayakoubi.vercel.app',
-          founder: { '@type': 'Person', name: 'Mohamed Yakoubi', alternateName: 'MOKA', sameAs: ['https://www.instagram.com/mokayakoubi'] },
-          description: 'Communauté privée d’entrepreneurs en Algérie, en préparation.'
-        }) }} />
-      </body>
-    </html>
-  )
+export const viewport:Viewport={themeColor:'#0a0c0b',colorScheme:'dark',width:'device-width',initialScale:1}
+export default function RootLayout({children}:{children:React.ReactNode}){
+ return <html lang="fr" className={inter.variable+' '+instrument.variable}><body className="oc-body">{children}<script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify({'@context':'https://schema.org','@type':'Person',name:'Mohamed Yakoubi',alternateName:'Moka Yakoubi',url:base,jobTitle:'Entrepreneur',knowsAbout:['Branding','Entrepreneuriat','Textile personnalisé','Marketing'],sameAs:['https://www.instagram.com/mokayakoubi/']})}}/></body></html>
 }
