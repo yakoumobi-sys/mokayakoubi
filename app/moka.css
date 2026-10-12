@@ -231,3 +231,12 @@ body.oc-body .mk-site em{font-family:var(--oc-serif),Georgia,serif;font-style:it
  .mk-club-form{padding:14px}
 }
 @media(prefers-reduced-motion:reduce){.mk-site *{scroll-behavior:auto!important;transition:none!important}}
+
+/* Keep important sections one tap away on phones. */
+@media(max-width:860px){
+ .mk-header{height:auto}
+ .mk-header-row{min-height:72px;flex-wrap:wrap;gap:0}
+ .mk-header-row .mk-nav{display:flex;flex-basis:100%;order:3;overflow-x:auto;min-height:47px;align-items:center;gap:22px;white-space:nowrap;border-top:1px solid #30382c;scrollbar-width:thin}
+ .mk-header-row .mk-nav a{flex-shrink:0;font-size:11px}
+ .mk-header-cta{margin-left:auto}
+}
