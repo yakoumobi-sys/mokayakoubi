@@ -23,10 +23,10 @@ export function generateStaticParams(): Params[] {
 
 export function generateMetadata({params}:Props): Metadata {
   const key=params.lang?.length===1?params.lang[0]:''
-  if (!key) return {title: 'Moka Yakoubi — Entrepreneur, Creator & Builder',description:'Entrepreneur algérien, fondateur de Caractère. Découvre les conférences gratuites, les projets, DZ Founders Club et les collaborations avec Moka.',alternates:{canonical:'/'}}
+  if (!key) return {metadataBase:new URL('https://mokayakoubi.vercel.app'),title: {absolute:'Moka Yakoubi — Entrepreneur & fondateur en Algérie'},description:'Entrepreneur algérien, fondateur de Caractère. Découvre les conférences gratuites, les projets, DZ Founders Club et les collaborations avec Moka.',alternates:{canonical:'/'}}
   if (!(key in pages)) return {}
   const info=pages[key as keyof typeof pages]
-  return {title:info.title,description:info.description,alternates:{canonical:'/'+key},openGraph:{title:info.title,description:info.description,url:'/'+key}}
+  return {metadataBase:new URL('https://mokayakoubi.vercel.app'),title:info.title,description:info.description,alternates:{canonical:'/'+key},openGraph:{title:info.title,description:info.description,url:'/'+key}}
 }
 
 export default function Page({params}:Props) {

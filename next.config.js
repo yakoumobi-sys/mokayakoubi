@@ -4,6 +4,7 @@ const nextConfig = {
   poweredByHeader: false,
   images: {
     formats: ['image/avif', 'image/webp'],
+    remotePatterns: [{ protocol: 'https', hostname: 'i.ytimg.com', pathname: '/vi/**' }],
   },
   // French is the primary conversion page; retain the legacy French URL.
   redirects: async () => [{ source: '/fr', destination: '/', permanent: true }],

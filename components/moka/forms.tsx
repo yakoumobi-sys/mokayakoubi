@@ -20,13 +20,13 @@ export function NewsletterSignup({source='site'}:{source?:string}){
    finally{setBusy(false)}
  }
  return <div className="mk-signup">
-   <span className="mk-eyebrow">FREE UPDATES / BUILD BETTER</span>
-   <h3>DES IDÉES DANS <em>TA BOÎTE MAIL.</em></h3>
-   <p>Reçois les nouveaux contenus et ressources MOKA. Inscription gratuite, désinscription sur demande.</p>
+   <span className="mk-eyebrow">Les notes de Moka</span>
+   <h3>Une idée à appliquer.<br/><em>Dans ta boîte mail.</em></h3>
+   <p>Les nouveaux contenus, les ressources et les prochaines rencontres. Inscription gratuite, désinscription sur demande.</p>
    {success?<p role="status" className="mk-form-success">{feedback}</p>:
    <form onSubmit={submit}>
-     <div className="mk-signup-row"><label className="mk-sr-only" htmlFor={'mk-email-'+source}>Ton adresse e-mail</label><input id={'mk-email-'+source} type="email" required maxLength={254} autoComplete="email" placeholder="ton@email.com" value={email} onChange={e=>setEmail(e.target.value)}/><button disabled={busy||!consent} type="submit">{busy?'ENVOI…':'S’INSCRIRE ↗'}</button></div>
-     <label className="mk-form-consent"><input type="checkbox" checked={consent} required onChange={e=>setConsent(e.target.checked)}/> J’accepte de recevoir les nouveaux contenus de MOKA par e-mail. <a href="/confidentialite">Confidentialité</a>.</label>
+     <div className="mk-signup-row"><label className="mk-sr-only" htmlFor={'mk-email-'+source}>Ton adresse e-mail</label><input id={'mk-email-'+source} type="email" required maxLength={254} autoComplete="email" placeholder="ton@email.com" value={email} onChange={e=>setEmail(e.target.value)}/><button disabled={busy||!consent} type="submit">{busy?'Envoi…':'Je m’inscris ↗'}</button></div>
+     <label className="mk-form-consent"><input type="checkbox" checked={consent} required onChange={e=>setConsent(e.target.checked)}/><span>J’accepte de recevoir les nouveaux contenus de MOKA par e-mail. <a href="/confidentialite">Confidentialité</a>.</span></label>
      <div className="mk-form-honeypot" aria-hidden="true"><label>Website<input value={website} tabIndex={-1} autoComplete="off" onChange={e=>setWebsite(e.target.value)}/></label></div>
      {feedback&&<p className="mk-form-error" role="alert">{feedback}</p>}
    </form>}
@@ -60,7 +60,7 @@ export function ContactForm(){
    <label>DÉCRIS TON PROJET *<textarea required minLength={20} maxLength={3500} rows={6} value={values.message} onChange={e=>set('message',e.target.value)} placeholder="Les objectifs, le public, les livrables, les informations importantes…"/></label>
    <div className="mk-contact-grid"><label>BUDGET INDICATIF<input maxLength={160} value={values.budget} onChange={e=>set('budget',e.target.value)} placeholder="Budget ou fourchette"/></label><label>DATE SOUHAITÉE<input maxLength={40} value={values.eventDate} onChange={e=>set('eventDate',e.target.value)} placeholder="Ex. 15 novembre 2026"/></label></div>
    <div className="mk-form-honeypot" aria-hidden="true"><label>Site web<input tabIndex={-1} autoComplete="off" value={values.website} onChange={e=>set('website',e.target.value)}/></label></div>
-   <label className="mk-form-consent"><input type="checkbox" required checked={values.consent} onChange={e=>set('consent',e.target.checked)}/> J’accepte l’utilisation de ces informations pour étudier ma demande et me recontacter. <a href="/confidentialite">Confidentialité ↗</a></label>
+   <label className="mk-form-consent"><input type="checkbox" required checked={values.consent} onChange={e=>set('consent',e.target.checked)}/><span>J’accepte l’utilisation de ces informations pour étudier ma demande et me recontacter. <a href="/confidentialite">Confidentialité ↗</a></span></label>
    {error&&<div role="alert" className="mk-form-error">{error}<p>Si nécessaire, <a href={mailto}>envoie ton brief directement par e-mail ↗</a>.</p></div>}
    <button type="submit" className="mk-contact-submit" disabled={busy}>{busy?'ENREGISTREMENT…':'ENVOYER MA PROPOSITION ↗'}</button>
  </form>

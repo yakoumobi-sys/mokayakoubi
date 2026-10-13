@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { MokaFrame } from '@/components/moka/site'
 
 export function MokaPrivacyPage(){
- return <MokaFrame><main>
+ return <MokaFrame><main id="main-content">
   <section className="mk-page-hero"><div className="mk-shell"><span className="mk-eyebrow">LEGAL / OCTOBRE 2026</span><h1 style={{marginTop:35}}>CONFIDENTIALITÉ<span style={{color:'#c9f17f'}}>.</span></h1><p>Comment ce site et DZ Founders Club traitent les informations que tu nous communiques.</p></div></section>
   <div className="mk-page-area"><div className="mk-shell" style={{maxWidth:900}}>
    <h2>QUI TRAITE LES DONNÉES ?</h2><p className="mk-page-copy">Le site Moka Yakoubi et le projet DZ Founders Club sont portés par Mohamed Yakoubi. Pour exercer tes droits ou poser une question : <a href="mailto:yakoumobi@gmail.com">yakoumobi@gmail.com</a>.</p>
